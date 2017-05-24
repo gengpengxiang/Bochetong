@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/prl_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="30%">
+        <ImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/bt_wode_touxiang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/icon_wode_touxiang" />
+    </RelativeLayout>
+    <View
+        android:layout_below="@id/rl"
+        android:id="@+id/vw"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="5%"/>
+
+    <com.bolong.bochetong.view.MyEditText
+        android:maxLength="11"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:inputType="number"
+        android:id="@+id/et1"
+        android:theme="@style/MyEditText"
+        android:drawableRight="@mipmap/icon_edittext_clear"
+        android:cursorVisible="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="10%"
+        android:hint="请输入手机号"
+        android:layout_below="@+id/vw" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/ll"
+        android:layout_below="@+id/et1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="10%"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+        <com.bolong.bochetong.view.MyEditText
+            app:layout_widthPercent="65%"
+
+            android:maxLength="4"
+            android:inputType="number"
+            android:hint="请输入验证码"
+            android:id="@+id/et2"
+            android:theme="@style/MyEditText"
+            android:drawableRight="@mipmap/icon_edittext_clear"
+            android:cursorVisible="true"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/bt_getSMS"/>
+
+        <TextView
+            app:layout_widthPercent="35%"
+            android:padding="5dp"
+            android:gravity="center"
+            android:id="@+id/bt_getSMS"
+            android:layout_alignParentRight="true"
+            android:text="获取验证码"
+            android:maxLength="5"
+            android:textColor="@color/white"
+            android:background="@drawable/shape_code"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerInParent="true"
+            app:layout_heightPercent="70%"/>
+    </android.support.percent.PercentRelativeLayout>
+
+    <!--<com.bolong.bochetong.view.MyEditText
+        android:inputType="number"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/et1"
+        android:hint="请输入验证码"
+        android:id="@+id/et2"
+        android:theme="@style/MyEditText"
+        android:drawableRight="@mipmap/icon_edittext_clear"
+        android:cursorVisible="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="10%"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />-->
+    <Button
+        android:id="@+id/bt_login"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="登录"
+        android:textColor="#ffffff"
+        android:layout_below="@id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@mipmap/bg_kscz_chongzhi"
+        app:layout_heightPercent="9%"/>
+
+
+
+
+</android.support.percent.PercentRelativeLayout>

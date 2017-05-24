@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/activity_qfbj"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f1f1f1"
+                tools:context="com.bolong.bochetong.activity.QfbjActivity">
+
+                <!-- <android.support.v4.widget.SwipeRefreshLayout
+                     android:id="@+id/swipeRefreshLayout"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"/>-->
+
+                <android.support.percent.PercentRelativeLayout
+                    android:id="@+id/qfbj_list"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="19dp"
+                    android:background="@mipmap/bg_qfbj_list"
+                    android:paddingLeft="25dp"
+                    android:visibility="invisible"
+                    app:layout_heightPercent="70%"
+                    app:layout_widthPercent="80%">
+
+                    <TextView
+                        android:id="@+id/tv_chewei"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:maxEms="16"
+                        android:singleLine="true"
+                        android:text="惠润家园小区(000013)车位"
+                        app:layout_heightPercent="14%" />
+
+                    <LinearLayout
+                        android:id="@+id/item_qfch"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_below="@id/tv_chewei"
+                        android:orientation="vertical"
+                        app:layout_heightPercent="14%">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="欠费车号"
+                            android:textColor="#b3b3b3"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_chehao"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:paddingLeft="2dp"
+                            android:text="京A66666" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/item_tcsj"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_below="@id/item_qfch"
+                        android:orientation="vertical"
+                        app:layout_heightPercent="14%">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="停车时间"
+                            android:textColor="#b3b3b3"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:lines="1"
+                            android:singleLine="true"
+                            android:id="@+id/tv_tingcheshijian"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:paddingLeft="2dp"
+                            android:text="2017-03-02 12:12:09 - 2017-03-05 13:22:00"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/item_gmsc"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_below="@id/item_tcsj"
+                        android:orientation="vertical"
+                        app:layout_heightPercent="14%">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="购买时长"
+                            android:textColor="#b3b3b3"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_goumaishichang"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:paddingLeft="2dp"
+                            android:text="1分钟" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/item_qfdh"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_below="@id/item_gmsc"
+                        android:orientation="vertical"
+                        app:layout_heightPercent="14%">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="总金额"
+                            android:textColor="#b3b3b3"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_danhao"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:paddingLeft="2dp"
+                            android:text="TGE66666666" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/item_tqsc"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_below="@id/item_qfdh"
+                        android:orientation="vertical"
+                        app:layout_heightPercent="14%">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="已缴金额"
+                            android:textColor="#b3b3b3"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_tuoqianshichang"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:paddingLeft="2dp"
+                            android:text="1天3小时" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/item_tqsc"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        app:layout_heightPercent="15%">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="应补缴" />
+
+                        <TextView
+                            android:id="@+id/tv_yingbujiao"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="100元"
+                            android:textColor="#749bfd" />
+                    </LinearLayout>
+                </android.support.percent.PercentRelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/qfbj_list"
+                    android:layout_centerHorizontal="true"
+                    app:layout_heightPercent="30%"
+                    app:layout_widthPercent="80%">
+
+                    <Button
+                        android:id="@+id/bt_qfbj_qzf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@mipmap/bg_kscz_chongzhi"
+                        android:text="去支付"
+                        android:textColor="#ffffff"
+                        android:visibility="invisible" />
+                </RelativeLayout>
+
+
+                <include
+                    layout="@layout/layout_json_failure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+
+
+            </android.support.percent.PercentRelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</android.support.v4.widget.SwipeRefreshLayout>
+
+
+

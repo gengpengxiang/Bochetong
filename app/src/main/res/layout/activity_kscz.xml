@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_kscz"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f1f1f1"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+
+    <TextView
+        android:gravity="center"
+        android:text="欠费补缴金额"
+        android:visibility="gone"
+        android:id="@+id/tv_qfbj"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="50%"
+        />
+
+    <FrameLayout
+        android:id="@+id/frame_kscz_yue"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="30%"
+        >
+        <ImageView
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/bg_kscz_yue"/>
+        <TextView
+            android:id="@+id/tv_yue"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- -"/>
+        <TextView
+            android:textColor="#ffffff"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="余额(元)"/>
+    </FrameLayout>
+
+
+    <android.support.percent.PercentRelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/relative_kscz_jine"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:layout_height="0dp"
+        app:layout_heightPercent="10%"
+        android:layout_below="@id/frame_kscz_yue">
+        <Button
+            android:id="@+id/bt_kscz_twenty"
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_heightPercent="80%"
+            app:layout_widthPercent="30%"
+            android:layout_centerVertical="true"
+            android:text="20元"
+            android:background="@mipmap/bg_kscz_jine_selected"/>
+        <Button
+            android:id="@+id/bt_kscz_fifth"
+            android:layout_centerInParent="true"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_heightPercent="80%"
+            app:layout_widthPercent="30%"
+            android:layout_centerVertical="true"
+            android:text="50元"
+            android:background="@mipmap/bg_kscz_jine_normal"
+            />
+        <Button
+            android:id="@+id/bt_kscz_hundred"
+            android:layout_marginRight="10dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_heightPercent="80%"
+            app:layout_widthPercent="30%"
+            android:layout_centerVertical="true"
+            android:text="100元"
+            android:layout_alignParentRight="true"
+            android:background="@mipmap/bg_kscz_jine_normal"/>
+    </android.support.percent.PercentRelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_kscz_edittext"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_heightPercent="10%"
+        android:layout_below="@id/relative_kscz_jine">
+        <!--<Button
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/bg_kscz_jine_normal"
+            android:text="输入其他金额"/>-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <EditText
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:background="@drawable/selector_edittext"
+            android:textCursorDrawable="@drawable/shape_edittext"
+            android:id="@+id/et"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:hint="请输入其他金额"
+            />
+    </LinearLayout>
+
+
+
+    <!-- 支付相关-->
+    <RelativeLayout
+        android:id="@+id/relative_kscz_zffs"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="10%"
+        android:layout_below="@id/linear_kscz_edittext">
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="支付方式"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/linear_zhifubao"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/shape"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="8%"
+        android:layout_below="@id/relative_kscz_zffs"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/bt_zhifubao"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/bg_zhifubao_normal"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/linear_weixin"
+        android:layout_marginTop="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="8%"
+        android:layout_below="@id/linear_zhifubao"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/bt_weixin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/bg_weixin_normal"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_marginTop="1dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        app:layout_heightPercent="10%"
+        android:layout_below="@id/linear_weixin"
+        android:layout_weight="2.5">
+        <Button
+            android:id="@+id/bt_chongzhi"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:background="@mipmap/bg_kscz_chongzhi"
+            android:text="充值"/>
+    </LinearLayout>
+
+
+
+
+
+</android.support.percent.PercentRelativeLayout>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_wode"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.bolong.bochetong.activity.WodeActivity">
+
+   <!-- <RelativeLayout
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+
+        <ImageView
+            android:id="@+id/bt_wode_touxiang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/icon_wode_touxiang" />
+
+        <TextView
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/bt_wode_touxiang"
+            android:id="@+id/tv_wode_zhanghao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="点击登录"
+            android:textSize="20sp" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:layout_below="@id/tv_wode_zhanghao"
+            android:id="@+id/tv_wode_number"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="135-2003-1276"/>
+    </RelativeLayout>-->
+    <LinearLayout
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"/>
+        <ImageView
+            android:id="@+id/bt_wode_touxiang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/icon_wode_touxiang" />
+        <TextView
+            android:gravity="center"
+            android:id="@+id/tv_wode_login"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:layout_centerHorizontal="true"
+            android:text="点击登录"
+            android:textSize="20sp" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:id="@+id/tv_wode_number"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            android:text="135-2003-1276"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
+    <RelativeLayout
+        android:clickable="true"
+        android:id="@+id/item_xxtz"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:background="@drawable/selector_wode"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/icon_wode_xinxi"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:text="消息通知" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_wode_dian" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_tsjy"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:clickable="true"
+        android:background="@drawable/selector_wode"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/icon_wode_tousu"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:text="投诉建议" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_wode_dian" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_gywm"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:clickable="true"
+        android:background="@drawable/selector_wode"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/icon_wode_women"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:text="关于我们" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_wode_dian" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_tcdl"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:clickable="true"
+        android:background="@drawable/selector_wode"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/icon_wode_tuichu"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:text="退出登录" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_wode_dian" />
+    </RelativeLayout>
+
+
+    <View
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2" />
+
+</LinearLayout>

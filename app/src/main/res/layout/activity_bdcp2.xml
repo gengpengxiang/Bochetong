@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <ImageView
+        android:id="@+id/bg_bdcp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@mipmap/bg_bdcp"
+        app:layout_heightPercent="20%"
+        app:layout_widthPercent="90%"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitXY"
+        android:layout_centerHorizontal="true"/>
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/bg_bdcp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:cursorVisible="false"
+            android:background="@drawable/selector_edittext_bdcp"
+            android:gravity="center"
+
+            android:id="@+id/edit_province"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/edit_1"
+             />
+        <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:cursorVisible="false"
+            android:background="@drawable/selector_edittext_bdcp"
+            android:gravity="center"
+
+            android:id="@+id/edit_1"
+            android:layout_toLeftOf="@+id/edit_2"
+            android:layout_centerInParent="true"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+        <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:cursorVisible="false"
+            android:background="@drawable/selector_edittext_bdcp"
+            android:gravity="center"
+
+            android:id="@+id/edit_2"
+            android:layout_toLeftOf="@+id/edit_3"
+            android:layout_centerInParent="true"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+        <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:cursorVisible="false"
+            android:background="@drawable/selector_edittext_bdcp"
+            android:gravity="center"
+
+            android:id="@+id/edit_3"
+            android:layout_centerInParent="true"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+        <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:cursorVisible="false"
+            android:background="@drawable/selector_edittext_bdcp"
+            android:gravity="center"
+
+            android:id="@+id/edit_4"
+            android:layout_toRightOf="@id/edit_3"
+            android:layout_centerInParent="true"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+        <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:cursorVisible="false"
+            android:background="@drawable/selector_edittext_bdcp"
+            android:gravity="center"
+
+            android:id="@+id/edit_5"
+            android:layout_toRightOf="@id/edit_4"
+            android:layout_centerInParent="true"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+
+        <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:cursorVisible="false"
+            android:background="@drawable/selector_edittext_bdcp"
+            android:gravity="center"
+
+            android:id="@+id/edit_6"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/edit_5"
+            android:layout_toEndOf="@+id/edit_5" />
+
+    </RelativeLayout>
+
+    <Button
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/bt_bind"
+        android:layout_below="@id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_bt_bind"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:text="绑定"/>
+
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/keyboard_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#f1f1f1"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:keyBackground="@drawable/keyboard_keybackground"
+        android:keyTextColor="#000"
+        android:keyTextSize="16sp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:shadowRadius="0.0"
+        android:shadowColor="#f1f1f1"
+        />
+
+</android.support.percent.PercentRelativeLayout>

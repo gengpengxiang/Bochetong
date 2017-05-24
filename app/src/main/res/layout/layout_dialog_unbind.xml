@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_quit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_dialog"
+    >
+
+    <TextView
+
+        android:background="@null"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_heightPercent="70%"
+        android:text="真的要解除绑定吗?"
+        android:textStyle="bold"
+        />
+
+    <View
+        android:id="@+id/view"
+        android:layout_below="@id/tv1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f1f1f1"/>
+    <Button
+
+        android:background="@null"
+        android:id="@+id/btn_confirm"
+        android:layout_alignParentBottom="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="30%"
+        android:text="解绑"
+        android:textColor="#749bfd"/>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="#f1f1f1"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/btn_confirm"
+        app:layout_heightPercent="30%"/>
+
+    <Button
+
+        android:background="@null"
+        android:layout_toRightOf="@id/btn_confirm"
+        android:id="@+id/btn_cancel"
+        android:layout_alignParentBottom="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="30%"
+        android:text="取消"
+        android:textColor="#749bfd"/>
+</android.support.percent.PercentRelativeLayout>
+

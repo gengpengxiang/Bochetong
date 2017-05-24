@@ -1,0 +1,48 @@
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_bc"
+    android:paddingTop="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f1f1f1">
+
+    <!--<ImageView-->
+        <!--android:id="@+id/icon_bc"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:src="@mipmap/icon_main_bc"-->
+        <!--app:layout_heightPercent="80%"-->
+        <!--app:layout_widthPercent="80%" />-->
+
+    <EditText
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="left|top"
+        android:cursorVisible="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_edittext_normal"
+        android:textCursorDrawable="@drawable/shape_edittext"
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="30%"
+        android:hint="请提出您的宝贵意见"
+        android:textStyle="normal"
+    />
+
+    <Button
+
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/et_content"
+        android:id="@+id/bt_submit"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_code_ing"/>
+</android.support.percent.PercentRelativeLayout>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">铂车通</string>
+    <string name="money">¥</string>
+    <string name="title_activity_kq">KqActivity</string>
+</resources>
