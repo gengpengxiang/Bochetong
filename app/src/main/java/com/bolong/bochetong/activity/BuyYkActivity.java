@@ -187,8 +187,6 @@ public class BuyYkActivity extends BaseActivity {
 
                     showBindDialog();
                 }
-
-
                 break;
             case R.id.bt_change_month:
 
@@ -212,7 +210,6 @@ public class BuyYkActivity extends BaseActivity {
                         }else {
                             //ToastUtil.showShort(BuyYkActivity.this,"请先选择停车场");
                         }
-
                     }
                 });
                 recyclerView.setAdapter(adapter4);
@@ -227,7 +224,12 @@ public class BuyYkActivity extends BaseActivity {
 
 
                 if (!TextUtils.isEmpty(tvParkName.getText()) && !TextUtils.isEmpty(tvCar.getText())&&!TextUtils.isEmpty(tvPrice.getText())) {
-                    createMonthCardOrder();
+                    if(monthCardCharge.getAmount()!=0){
+                        createMonthCardOrder();
+                    }else {
+                        ToastUtil.showShort(BuyYkActivity.this, "当前停车场月卡剩余数量为0");
+                    }
+
 
                 } else {
                     ToastUtil.showShort(BuyYkActivity.this, "填写信息不完整");

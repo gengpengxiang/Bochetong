@@ -13,9 +13,9 @@ public class Param {
 
     public static final String WX_APP_ID = "wx21388637886dba0b";
     //正式地址
-   // public static final String IP = "http://101.201.145.238";
+    public static final String IP = "http://101.201.145.238";
     //测试地址
-    public static final String IP = "http://101.201.145.238:8666";
+    //public static final String IP = "http://101.201.145.238:8666";
 
 //    public static final String IP = "http://192.168.1.220/bolong_web";
 
