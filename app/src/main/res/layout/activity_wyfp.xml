@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_wyfp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.bolong.bochetong.activity.WyfpActivity">
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/layout_tv"
+        android:background="@color/gray"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:paddingRight="30dp"
+        app:layout_heightPercent="7%">
+        <TextView
+            android:text=""
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="开票历史"
+            android:id="@+id/tv_history"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <View
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/tv_history"
+            android:id="@+id/view"
+            android:background="@color/babyblack"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_centerVertical="true"
+            app:layout_heightPercent="50%"
+            />
+        <TextView
+            android:layout_toLeftOf="@id/view"
+            android:id="@+id/tv_explain"
+            android:text="开票说明"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </android.support.percent.PercentRelativeLayout>
+
+    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+        android:layout_below="@id/layout_tv"
+        android:id="@+id/mRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="83%"/>
+
+    <RelativeLayout
+        android:visibility="invisible"
+        android:id="@+id/layout_all"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="10%">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"/>
+
+        <!--<CheckBox
+            android:layout_marginLeft="30dp"
+            android:id="@+id/checkBox"
+            android:button="@null"
+            android:background="@drawable/selector_checkbox_fp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />-->
+        <CheckBox
+            android:layout_marginLeft="30dp"
+            android:id="@+id/checkBox"
+            android:button="@null"
+            android:background="@mipmap/icon_select_gray"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_toRightOf="@id/checkBox"
+            android:id="@+id/bt_checkall"
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            android:text="全选"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:enabled="false"
+            android:id="@+id/bt_next"
+            android:layout_marginRight="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:text="下一步"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_code_ing"/>
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+</android.support.percent.PercentRelativeLayout>

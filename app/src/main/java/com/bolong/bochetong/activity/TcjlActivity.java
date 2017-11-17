@@ -1,32 +1,28 @@
 package com.bolong.bochetong.activity;
 
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.bolong.bochetong.adapter.TcjlAdapter;
-import com.bolong.bochetong.bean.RecordList;
 import com.bolong.bochetong.bean.User;
+import com.bolong.bochetong.bean2.CarRecord;
+import com.bolong.bochetong.bean2.MsgEvent;
 import com.bolong.bochetong.utils.HttpUtils;
 import com.bolong.bochetong.utils.Param;
-import com.bolong.bochetong.utils.RecyclerViewRefreshUtils;
 import com.bolong.bochetong.utils.SharedPreferenceUtil;
 import com.google.gson.Gson;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
-
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -36,38 +32,26 @@ import okhttp3.Response;
 
 public class TcjlActivity extends BaseActivity {
     private Unbinder unbinder;
-    public List<RecordList.ContentBean.DateBean> date = new ArrayList<>();
+    public List<CarRecord.DataBean> dataList = new ArrayList<>();
     @BindView(R.id.mRecyclerView)
     PullLoadMoreRecyclerView mRecyclerView;
-    @BindView(R.id.iv_failure)
-    ImageView ivFailure;
-    private static TcjlAdapter adapter;
+
+    private TcjlAdapter adapter;
     private LinearLayout ll;
 
     private int totalPage;
     private int pageNo;
     private int page = 1;
+    public static final int ACTION_CARRECORELIST = 400;
+    public static final int ACTION_FAILURE = 444;
 
     @Override
     public void onBaseCreate(Bundle bundle) {
-
         setContentViewId(R.layout.activity_tcjl);
 
-        ll = (LinearLayout) findViewById(R.id.layout_json_failure);
-
+        EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this);
-
-        adapter = new TcjlAdapter(this, getDatas(1));
-        mRecyclerView.setAdapter(adapter);
-
-        //关闭下拉刷新功能
-//        mRecyclerView.setPullRefreshEnable(false);
-        //首次进入显示顶部加载动画
-        mRecyclerView.setRefreshing(true);
-        mRecyclerView.setColorSchemeResources(R.color.blue);
-        mRecyclerView.setLinearLayout();
-        refreshRecyclerView();
-
+        getCarRecords();
     }
 
     private void refreshRecyclerView() {
@@ -77,9 +61,9 @@ public class TcjlActivity extends BaseActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        date.clear();
+                        dataList.clear();
                         page = 1;
-                        getDatas(1);
+                        getCarRecords();
                         adapter.notifyDataSetChanged();
                         mRecyclerView.setPullLoadMoreCompleted();
                     }
@@ -93,11 +77,12 @@ public class TcjlActivity extends BaseActivity {
                     public void run() {
                         page++;
                         if (page <= totalPage) {
-                            getDatas(page);
+//                            getDatas(page);
+                            getCarRecords();
                             adapter.notifyDataSetChanged();
                             mRecyclerView.setPullLoadMoreCompleted();
                         } else {
-                            Toast.makeText(TcjlActivity.this, "没有数据了哦", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(TcjlActivity.this, "没有数据了哦", Toast.LENGTH_SHORT).show();
                             mRecyclerView.setPullLoadMoreCompleted();
                         }
                     }
@@ -108,7 +93,7 @@ public class TcjlActivity extends BaseActivity {
     }
 
 
-    public List<RecordList.ContentBean.DateBean> getDatas(int page) {
+    public void getCarRecords() {
 
         String uid = null;
         String token = null;
@@ -123,78 +108,54 @@ public class TcjlActivity extends BaseActivity {
         Map<String, String> map = new HashMap<>();
         map.put("uid", uid);
         map.put("token", token);
-        map.put("pageNo", String.valueOf(page));
+        //map.put("pageNo", String.valueOf(page));
         HttpUtils.post(Param.CARRECORDLIST, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        RecyclerViewRefreshUtils.refreshCompleted(mRecyclerView, ll);
+                        setContentViewId(R.layout.layout_nonet);
                     }
                 });
-                Log.e("TAG", "onFailure: ", e);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                //date.clear();
                 String jsonDatas = response.body().string();
                 Log.e("停车记录", jsonDatas);
                 try {
                     try {
                         JSONObject jsonObject = new JSONObject(jsonDatas);
-                        String errCode = jsonObject.optString("errCode");
-//                        if (errCode.equals("1000")) {
                         String content = jsonObject.optString("content");
                         Gson gson = new Gson();
-                        RecordList.ContentBean bean = gson.fromJson(content, RecordList.ContentBean.class);
-                        //获取页数
-                        totalPage = bean.getTotalPage();
-                        pageNo = bean.getPageNo();
-                        List<RecordList.ContentBean.DateBean> newList = bean.getDate();
-                        Log.e("NewList", newList.size() + "");
-                        //date.clear();
-                        date.addAll(newList);
-                        //ADD
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //progressBar.setVisibility(View.GONE);
-                                adapter.notifyDataSetChanged();
-                                mRecyclerView.setPullLoadMoreCompleted();
-                            }
-                        });
-//                        }
-
+                        CarRecord bean = gson.fromJson(content, CarRecord.class);
+                        List<CarRecord.DataBean> newList = bean.getData();
+                        dataList.clear();
+                        dataList.addAll(newList);
+                        EventBus.getDefault().post(new MsgEvent(ACTION_CARRECORELIST));
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
-
+                        EventBus.getDefault().post(new MsgEvent(ACTION_FAILURE));
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                RecyclerViewRefreshUtils.refreshCompleted(mRecyclerView, ll);
+                                setContentViewId(R.layout.layout_noinfo);
                             }
                         });
+
                     }
                 } catch (Exception e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            RecyclerViewRefreshUtils.refreshCompleted(mRecyclerView, ll);
+                            setContentViewId(R.layout.layout_noinfo);
                         }
                     });
-
-
                 }
-
             }
         }, map);
-        return date;
-
     }
-
 
     @Override
     public void initView() {
@@ -204,7 +165,22 @@ public class TcjlActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         unbinder.unbind();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateUI(MsgEvent event) {
+        if (event.getAction() == ACTION_CARRECORELIST) {
+            adapter = new TcjlAdapter(dataList);
+            mRecyclerView.setAdapter(adapter);
+            mRecyclerView.setColorSchemeResources(R.color.blue);
+            mRecyclerView.setLinearLayout();
+            refreshRecyclerView();
+        }
+        if (event.getAction() == ACTION_FAILURE) {
+
+        }
     }
 
 

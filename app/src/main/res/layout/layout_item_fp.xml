@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_month"
+        android:paddingBottom="10dp"
+        android:paddingLeft="30dp"
+        android:textSize="16sp"
+        android:text="13月"
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+       <!-- <ImageView
+            android:id="@+id/iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"/>-->
+        <!--<RadioButton
+            android:id="@+id/iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />-->
+       <!-- <android.support.v7.widget.AppCompatCheckBox
+            android:layout_centerVertical="true"
+            android:theme="@style/MyCheckBox"
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />-->
+        <ImageView
+            android:layout_marginRight="30dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_select_gray"/>
+        <TextView
+            android:visibility="gone"
+            android:layout_marginRight="30dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/tv_hasPrint"
+            android:text="已开"
+            android:textColor="@color/blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"
+            android:id="@+id/tv_address"
+            android:layout_toRightOf="@id/checkBox"
+            android:text="月季园小区"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textSize="12sp"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@mipmap/icon_circle_red"
+            android:layout_marginTop="10dp"
+            android:id="@+id/tv_rcsj"
+            android:layout_toRightOf="@id/checkBox"
+            android:layout_below="@id/tv_address"
+            android:text="入场时间:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textSize="12sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/tv_entertime"
+            android:layout_toRightOf="@id/tv_rcsj"
+            android:layout_below="@id/tv_address"
+            android:text="2018.06.05 12:00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="12sp"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@mipmap/icon_circle_green"
+            android:layout_marginTop="5dp"
+            android:id="@+id/tv_ccsj"
+            android:layout_toRightOf="@id/checkBox"
+            android:layout_below="@id/tv_rcsj"
+            android:text="出场时间:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textSize="12sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/tv_outtime"
+            android:layout_toRightOf="@id/tv_ccsj"
+            android:layout_below="@id/tv_rcsj"
+            android:text="2018.06.05 12:00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:text="15.0"
+            android:textSize="18sp"
+            android:textColor="@color/blue"
+            android:layout_toLeftOf="@+id/tv_yuan"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_yuan"
+            android:text="元"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</LinearLayout>

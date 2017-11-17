@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_carPlate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:text="京A88888"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/layout_menu_carplate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@mipmap/bg_nk_item"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/menu_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:onClick="doClick">
+
+            <ImageView
+                android:id="@+id/iv_nk_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:paddingTop="5dp"
+                android:src="@mipmap/icon_nk_cancel" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/menu_confirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:onClick="doClick">
+
+            <ImageView
+                android:id="@+id/iv_nk_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:paddingTop="5dp"
+                android:src="@mipmap/icon_nk_confirm" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

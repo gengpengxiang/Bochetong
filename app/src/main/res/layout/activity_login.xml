@@ -52,7 +52,7 @@
         <com.bolong.bochetong.view.MyEditText
             app:layout_widthPercent="65%"
 
-            android:maxLength="4"
+            android:maxLength="6"
             android:inputType="number"
             android:hint="请输入验证码"
             android:id="@+id/et2"
@@ -79,21 +79,6 @@
             app:layout_heightPercent="70%"/>
     </android.support.percent.PercentRelativeLayout>
 
-    <!--<com.bolong.bochetong.view.MyEditText
-        android:inputType="number"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_below="@+id/et1"
-        android:hint="请输入验证码"
-        android:id="@+id/et2"
-        android:theme="@style/MyEditText"
-        android:drawableRight="@mipmap/icon_edittext_clear"
-        android:cursorVisible="true"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_heightPercent="10%"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />-->
     <Button
         android:id="@+id/bt_login"
         android:layout_marginTop="10dp"
@@ -106,8 +91,6 @@
         android:layout_height="0dp"
         android:background="@mipmap/bg_kscz_chongzhi"
         app:layout_heightPercent="9%"/>
-
-
 
 
 </android.support.percent.PercentRelativeLayout>

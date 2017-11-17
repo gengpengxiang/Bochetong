@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="12dp"
+    android:paddingTop="12dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:background="@color/white">
+
+
+    <TextView
+        android:textSize="20sp"
+        android:gravity="center_vertical"
+        android:id="@+id/tv0"
+        android:text="路内停车"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@mipmap/icon_park_inside"
+        android:textColor="@color/blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:lines="1"
+        android:ellipsize="end"
+        android:maxEms="10"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:id="@+id/tv_name"
+        android:text="新翠雅苑"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv0"
+        android:layout_alignLeft="@+id/tv0"
+        android:layout_alignStart="@+id/tv0" />
+
+    <ImageView
+        android:layout_marginTop="17dp"
+        android:src="@mipmap/icon_park_recommend"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/tv_name"
+        android:layout_below="@id/tv0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:visibility="gone"
+        android:layout_marginTop="15dp"
+        android:textSize="13sp"
+        android:gravity="center_vertical"
+        android:layout_below="@id/tv0"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/tv_name"
+        android:id="@+id/tv_distance"
+        android:text="0.5km"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginTop="5dp"
+        android:textSize="13sp"
+        android:gravity="center_vertical"
+        android:layout_below="@id/tv_name"
+        android:id="@+id/tv_address"
+        android:text="北京市门头沟西翠路"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:id="@+id/layout_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:background="@drawable/shape_item_empty">
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tv_empty"
+                android:text="空车位 : "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="13sp"
+                android:textColor="@color/babyred"
+                android:id="@+id/tv_empty2"
+                android:text="22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/layout_empty"
+            android:layout_centerVertical="true"
+            android:id="@+id/layout_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:background="@drawable/shape_item_price">
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tv_price"
+                android:text="首价 : "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="13sp"
+                android:textColor="@color/blue"
+                android:id="@+id/tv_price2"
+                android:text="5元/h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/bt_navi"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="0.1km"
+        android:textSize="14sp"
+        android:drawablePadding="5dp"
+        android:drawableTop="@mipmap/icon_park_navi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
+
+
+
+</android.support.percent.PercentRelativeLayout>

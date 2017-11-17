@@ -6,4 +6,10 @@
     <color name="white">#ffffff</color>
     <color name="gray">#f1f1f1</color>
     <color name="blue">#5084ed</color>
+    <color name="red">#CC0000</color>
+    <color name="babyred">#FF5a66</color>
+    <color name="black">#000000</color>
+    <color name="deepgray">#D1D1D1</color>
+    <color name="babyblack">#484848</color>
+    <color name="deepwhite">#f1f5fb</color>
 </resources>

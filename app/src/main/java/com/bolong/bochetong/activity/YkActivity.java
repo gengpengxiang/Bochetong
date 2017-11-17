@@ -2,53 +2,80 @@ package com.bolong.bochetong.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bolong.bochetong.bean.MonthCard;
+import com.bolong.bochetong.adapter.YkAdapter;
 import com.bolong.bochetong.bean.User;
+import com.bolong.bochetong.bean2.MonthCard;
+import com.bolong.bochetong.bean2.MsgEvent;
+import com.bolong.bochetong.fragment.YkFragment;
 import com.bolong.bochetong.utils.HttpUtils;
 import com.bolong.bochetong.utils.Param;
 import com.bolong.bochetong.utils.SharedPreferenceUtil;
+import com.bolong.bochetong.utils.ToastUtil;
+import com.bolong.bochetong.view.MyViewPager;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import static com.bolong.bochetong.activity.BdcpActivity2.ACTION_ADDMONTHCAR_SUCCESS;
+import static com.bolong.bochetong.activity.BdcpActivity2.ACTION_ADDYK_SUCCESS;
+import static com.bolong.bochetong.activity.YkOrderActivity.ACTION_BUYMONTHCARD_SUCCESS;
+import static com.bolong.bochetong.activity.YkxfActivity.ACTION_MONTHCARD_XUFEI;
+import static com.bolong.bochetong.fragment.NkFragment.ACTION_MONTHCARD_UPDATE;
 
 public class YkActivity extends BaseActivity {
 
-    private TextView tvPark;
-    private TextView tvPhoneNumber;
-    private TextView tvCarport;
-    private TextView tvCarplate;
-    private TextView tvStartTime;
-    private TextView tvEndTime;
-    private RelativeLayout layoutYk;
-    private Button bt_qpbd;
-    private TextView bt_bdcl;
-    private String cardId;
-    private String monthlyPrice;
+
+    @BindView(R.id.viewPager)
+    MyViewPager viewPager;
+    @BindView(R.id.tv_indicator)
+    TextView tvIndicator;
+    @BindView(R.id.bt_kaika)
+    Button btKaika;
+    private Unbinder unbind;
+    private int ACTION_REALMONTHCARDS = 79856547;
+    private int ACTION_REALMONTHCARDS_FAILURE = 796956547;
+    List<Fragment> list = new ArrayList<>();
+    List<MonthCard.MonthCardBean> cardList = new ArrayList<>();
+    List<MonthCard.MonthCardBean> newList = new ArrayList<>();
+    private MonthCard monthCard;
+
+    private int position=1000;
 
     @Override
     public void onBaseCreate(Bundle bundle) {
         setContentViewId(R.layout.activity_yk);
-        doPost();
-        layoutYk = (RelativeLayout) findViewById(R.id.layout_yk);
+        unbind = ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
 
+        getRealmonthCards();
+
+        //viewPager.setVisibility(View.GONE);
+        //tvIndicator.setVisibility(View.GONE);
     }
 
     @Override
@@ -56,7 +83,173 @@ public class YkActivity extends BaseActivity {
         setTitle("月卡");
     }
 
-    private void doPost() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbind.unbind();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public String toNewStr(int n) {
+        String str = String.valueOf(n);
+        DecimalFormat df = new DecimalFormat("00");
+        String newStr = df.format(Integer.parseInt(str));
+        return newStr;
+    }
+
+
+    @OnClick(R.id.bt_kaika)
+    public void onViewClicked() {
+        Intent intent = new Intent();
+        intent.setClass(YkActivity.this,BuyYkActivity.class);
+//        intent.setClass(YkActivity.this,YkxfActivity.class);
+        startActivity(intent);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateUI(MsgEvent event) {
+        if(event.getAction()==ACTION_REALMONTHCARDS){
+            String content = event.getStr();
+            Gson gson = new Gson();
+            monthCard = gson.fromJson(content,MonthCard.class);
+            cardList.addAll(monthCard.getMonthCard());
+            //Log.e("设置月卡数据",monthCard.getMonthCard().get(1).getCarNumbers().size()+"");
+
+            if(monthCard.getMonthCard().size()==0){
+                tvIndicator.setVisibility(View.GONE);
+            }else {
+                tvIndicator.setVisibility(View.VISIBLE);
+            }
+
+            setDatas(cardList);
+            btKaika.setVisibility(View.VISIBLE);
+        }
+        if (event.getAction() == ACTION_ADDMONTHCAR_SUCCESS) {
+
+            ToastUtil.showShort(YkActivity.this,event.getPosition()+"");
+            list.clear();
+            cardList.clear();
+            newList.clear();
+            getRealmonthCards();
+            position = event.getPosition();
+            viewPager.setCurrentItem(position);
+        }
+        if(event.getAction() == ACTION_MONTHCARD_UPDATE){
+            position = event.getPosition();
+            //ToastUtil.showShort(YkActivity.this,"解绑返回的位置"+event.getPosition());
+            list.clear();
+            cardList.clear();
+            newList.clear();
+            getRealmonthCards();
+        }
+        if(event.getAction() == ACTION_ADDYK_SUCCESS){
+            //ToastUtil.showShort(YkActivity.this,"添加返回的位置"+event.getPosition());
+            position = event.getPosition();
+            list.clear();
+            cardList.clear();
+            newList.clear();
+            getRealmonthCards();
+        }
+        if (event.getAction() == ACTION_BUYMONTHCARD_SUCCESS) {
+            position = 1000;
+            list.clear();
+            cardList.clear();
+            newList.clear();
+            getRealmonthCards();
+        }
+        if(event.getAction() == ACTION_MONTHCARD_XUFEI){
+            position = event.getPosition();
+            list.clear();
+            cardList.clear();
+            newList.clear();
+            getRealmonthCards();
+        }
+        if(event.getAction() == ACTION_REALMONTHCARDS_FAILURE){
+            viewPager.setVisibility(View.GONE);
+            tvIndicator.setVisibility(View.GONE);
+            btKaika.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    private void setDatas(final List<MonthCard.MonthCardBean> cardList) {
+        if (cardList.size() > 1) {
+
+            newList.addAll(cardList);
+            newList.addAll(cardList);
+            newList.addAll(cardList);
+        } else {
+            newList.addAll(cardList);
+        }
+        if(position!=1000){
+
+            if (position == list.size() / 3 - 1) {
+                tvIndicator.setText(toNewStr(list.size() / 3) + "/" + toNewStr(cardList.size()));
+            }
+            if (position == list.size() / 3 * 2) {
+                tvIndicator.setText("01" + "/" + toNewStr(cardList.size()));
+            }
+            if (position > list.size() / 3 - 1 && position < list.size() / 3 * 2) {
+                tvIndicator.setText(toNewStr(position - cardList.size() + 1) + "/" + toNewStr(cardList.size()));
+            }
+        }else {
+            tvIndicator.setText("01/" + toNewStr(cardList.size()));
+        }
+//        tvIndicator.setText("01/" + toNewStr(cardList.size()));
+
+        for (int i = 0; i < newList.size(); i++) {
+            YkFragment fragment = new YkFragment(newList.get(i), i);
+            list.add(fragment);
+        }
+
+        YkAdapter myAdapter = new YkAdapter(getSupportFragmentManager(),list);
+        myAdapter.notifyDataSetChanged();
+        viewPager.setAdapter(myAdapter);
+        //viewPager.setAdapter(new YkAdapter(getSupportFragmentManager(), list));
+
+        if(position!=1000){
+            viewPager.setCurrentItem(position,false);
+        }else {
+            viewPager.setCurrentItem(list.size() / 3, false);
+        }
+
+//        viewPager.setCurrentItem(list.size() / 3, false);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                int position = viewPager.getCurrentItem();
+                if (ViewPager.SCROLL_STATE_IDLE == state) {
+                    if (position == list.size() / 3 - 1) {
+                        viewPager.setCurrentItem(position + list.size() / 3, false);
+//                        tv.setText(list.size() / 3+"/"+s11);
+                        tvIndicator.setText(toNewStr(list.size() / 3) + "/" + toNewStr(cardList.size()));
+                    }
+                    if (position == list.size() / 3 * 2) {
+                        viewPager.setCurrentItem(list.size() / 3, false);
+                        tvIndicator.setText("01" + "/" + toNewStr(cardList.size()));
+                    }
+                    if (position > list.size() / 3 - 1 && position < list.size() / 3 * 2) {
+//                        tv.setText(position-size+1+"/"+s11);
+                        tvIndicator.setText(toNewStr(position - cardList.size() + 1) + "/" + toNewStr(cardList.size()));
+                    }
+                }
+            }
+        });
+
+        viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.vp_yk));
+        viewPager.setOffscreenPageLimit(list.size());
+    }
+
+
+    private void getRealmonthCards(){
         String uid = null;
         String token = null;
         if (SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo") != null) {
@@ -70,146 +263,31 @@ public class YkActivity extends BaseActivity {
         Map<String, String> map = new HashMap<>();
         map.put("uid", uid);
         map.put("token", token);
-        HttpUtils.post(Param.MONTHCARDLIST, new Callback() {
+        HttpUtils.post(Param.REALMONTHCARDS, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        LinearLayout ll = (LinearLayout) findViewById(R.id.layout_json_failure);
-                        ll.setVisibility(View.VISIBLE);
-                    }
-                });
+                Log.e("月卡失败","fail");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String jsonDatas = response.body().string();
-                Log.e("月卡", jsonDatas);
+                Log.e("返回月卡数据", jsonDatas);
                 try {
-                    try {
-                        JSONObject jsonObject = new JSONObject(jsonDatas);
+                    JSONObject jsonObject = new JSONObject(jsonDatas);
+                    String errCode = jsonObject.optString("errCode");
+                    if(errCode.equals("1000")){
                         String content = jsonObject.optString("content");
-                        JSONObject jb = new JSONObject(content);
-                        String status = jb.optString("status");
-                        String monthCardInfo = jb.optString("monthCard");
-                        Log.e("Info", monthCardInfo);
-                        //已绑定车辆
-                        if (status.equals("1")) {
-
-                            //存在月卡信息
-                            if (!monthCardInfo.equals("null")) {
-                                Gson gson = new Gson();
-                                MonthCard card = gson.fromJson(content, MonthCard.class);
-                                List<MonthCard.MonthCardBean> cardList = card.getMonthCard();
-                                final MonthCard.MonthCardBean monthCard = cardList.get(0);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        layoutYk.removeAllViews();
-                                        LayoutInflater layoutInflater = LayoutInflater.from(YkActivity.this);
-                                        View view = layoutInflater.inflate(R.layout.layout_yk_card, null);
-                                        tvPark = (TextView) view.findViewById(R.id.tv_park);
-                                        tvPhoneNumber = (TextView) view.findViewById(R.id.tv_phoneNumber);
-                                        tvCarport = (TextView) view.findViewById(R.id.tv_carport);
-                                        tvCarplate = (TextView) view.findViewById(R.id.tv_carplate);
-                                        tvStartTime = (TextView) view.findViewById(R.id.tv_startTime);
-                                        tvEndTime = (TextView) view.findViewById(R.id.tv_endTime);
-                                        bt_bdcl = (TextView) view.findViewById(R.id.bt_bdcl);
-                                        layoutYk.addView(view);
-                                        view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-
-                                        tvPark.setText(monthCard.getParkName());
-                                        tvPhoneNumber.setText(monthCard.getUserPhoneNumber());
-                                        tvCarport.setText(monthCard.getCarportNum());
-                                        tvCarplate.setText(monthCard.getCarNumber());
-                                        tvStartTime.setText(monthCard.getCreateTime());
-                                        tvEndTime.setText(monthCard.getCardTermofvalidity());
-
-                                        cardId = monthCard.getCardId();
-                                        monthlyPrice = monthCard.getMonthlyPrice();
-                                    }
-                                });
-
-                            }
-                            //无月卡信息
-                            if (monthCardInfo.equals("null")) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        layoutYk.removeAllViews();
-                                        LayoutInflater layoutInflater = LayoutInflater.from(YkActivity.this);
-                                        View view = layoutInflater.inflate(R.layout.layout_yk_nocard, null);
-                                        layoutYk.addView(view);
-                                        view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-                                    }
-                                });
-
-                            }
-                        }
-                        //未绑定车辆
-                        if (status.equals("0")) {
-                            if (monthCardInfo.equals("null")) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        layoutYk.removeAllViews();
-                                        LayoutInflater layoutInflater = LayoutInflater.from(YkActivity.this);
-                                        View view = layoutInflater.inflate(R.layout.layout_yk_bdcp, null);
-                                        bt_qpbd = (Button) view.findViewById(R.id.bt_qqbd);
-
-                                        layoutYk.addView(view);
-                                        view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-                                    }
-                                });
-                            }
-
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        EventBus.getDefault().post(new MsgEvent(ACTION_REALMONTHCARDS,content));
                     }
-                } catch (Exception e) {
-
+                    if(errCode.equals("4000")){
+                        EventBus.getDefault().post(new MsgEvent(ACTION_REALMONTHCARDS_FAILURE));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }, map);
-    }
-
-    public void doClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_xufei:
-                Intent intent0 = new Intent();
-                intent0.setClass(YkActivity.this, KsczActivity.class);
-//                intent0.putExtra("monthlyPrice", monthlyPrice);
-                intent0.putExtra("cardId", cardId);
-                startActivityForResult(intent0, 1);
-
-                //               startActivity(intent0);
-                break;
-//            case R.id.bt_bdcl:
-//                Intent intent1 = new Intent();
-//                intent1.setClass(YkActivity.this, BdcpActivity2.class);
-//                startActivityForResult(intent1,1);
-//                break;
-            case R.id.bt_qqbd:
-
-                Intent intent2 = new Intent();
-                intent2.setClass(YkActivity.this, BdcpActivity2.class);
-                startActivityForResult(intent2, 1);
-                //layoutYk.removeAllViews();
-                break;
-        }
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 1) {
-            layoutYk.removeAllViews();
-            doPost();
-            Log.e("onActivityResult", "onActivityResult");
-        }
     }
 
 

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_wdqb"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/deepwhite"
+    tools:context="com.bolong.bochetong.activity.WdqbActivity">
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/layout_money"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="30%">
+        <TextView
+            android:id="@+id/tv_syje"
+            android:gravity="center"
+            android:layout_marginLeft="30dp"
+            android:text="剩余金额为:"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_heightPercent="30%"/>
+        <ImageView
+            android:layout_below="@id/tv_syje"
+            android:layout_toRightOf="@id/tv_syje"
+            android:id="@+id/iv_money"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@mipmap/icon_rmb"/>
+
+        <android.support.percent.PercentRelativeLayout
+            android:padding="5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/iv_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_notopframe_blue">
+            <TextView
+                android:id="@+id/tv_yue"
+                android:textColor="@color/blue"
+                android:textSize="28sp"
+                android:text="- -"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:paddingTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/tv_yue"
+                android:textColor="@color/blue"
+                android:text="元整"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </android.support.percent.PercentRelativeLayout>
+
+
+    </android.support.percent.PercentRelativeLayout>
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/layout_money"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_heightPercent="10%"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_marginRight="30dp"
+                android:drawablePadding="10dp"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@mipmap/icon_wallet"
+                android:id="@+id/bt_cz"
+                android:gravity="center"
+                android:text="充值"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_marginLeft="30dp"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@mipmap/icon_note"
+                android:id="@+id/bt_mx"
+                android:gravity="center"
+                android:text="明细"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.percent.PercentRelativeLayout>

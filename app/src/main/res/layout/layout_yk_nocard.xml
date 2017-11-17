@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:text="您还没有购买月卡"/>
+        android:text="您还没有购买年卡"/>
 
     <TextView
         android:layout_gravity="center_horizontal"
@@ -29,6 +29,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:text="若要办理月卡，请到岗亭处咨询"/>
+        android:text="若要办理年卡，请到岗亭处咨询"/>
 
 </LinearLayout>

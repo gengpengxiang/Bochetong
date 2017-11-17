@@ -9,7 +9,11 @@ public class XxtzActivity extends BaseActivity {
 
     @Override
     public void onBaseCreate(Bundle bundle) {
-        setContentViewId(R.layout.activity_xxtz);
+
+        //setContentViewId(R.layout.activity_xxtz);
+
+        setContentViewId(R.layout.layout_noinfo);
+        //setContentViewId(R.layout.layout_item_nk);
     }
 
     @Override

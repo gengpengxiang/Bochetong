@@ -2,4 +2,20 @@
     <string name="app_name">铂车通</string>
     <string name="money">¥</string>
     <string name="title_activity_kq">KqActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="errcode_success">发送成功</string>
+    <string name="errcode_cancel">发送取消</string>
+    <string name="errcode_deny">发送被拒绝</string>
+    <string name="errcode_unsupported">不支持错误</string>
+    <string name="errcode_unknown">发送返回</string>
+
+    <string name="monthcard_warn">车主您好，您是铂车通年卡用户,您登记的停车信息为：</string>
+    <string name="monthcard_date1">车主您好，您的年卡使用有效期至</string>
+    <string name="monthcard_date2">。请您及时充值，以免给您的停车带来不便。年卡到期后，车位将不予保留。</string>
+
+    <string name="change_info">更换手机号后，下次登录可使用新手机号登录。当前手机号：</string>
+
 </resources>

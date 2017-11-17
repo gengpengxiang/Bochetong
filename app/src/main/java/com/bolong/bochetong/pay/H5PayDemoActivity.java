@@ -2,7 +2,6 @@ package com.bolong.bochetong.pay;
 
 import com.alipay.sdk.app.PayTask;
 import com.alipay.sdk.util.H5PayResultModel;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

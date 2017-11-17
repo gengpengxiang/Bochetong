@@ -7,11 +7,6 @@
     tools:context="com.bolong.bochetong.activity.BcActivity">
 
 
-    <include
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        layout="@layout/layout_json_failure"/>
     <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
         android:background="@color/gray"
         android:id="@+id/mRecyclerView"
@@ -19,5 +14,11 @@
         android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:scrollbars="none" />
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        layout="@layout/layout_noinfo"/>
 
 </RelativeLayout>

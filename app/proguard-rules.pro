@@ -87,6 +87,9 @@
 -keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
 -keep class com.alipay.sdk.app.PayTask{ public *;}
 -keep class com.alipay.sdk.app.AuthTask{ public *;}
+
+-keep class com.alipay.android.phone.mrpc.core.AndroidHttpClient{*;}
+
 #百度地图
 -dontwarn com.baidu.**
 -dontwarn com.baidu.mapapi.**
@@ -95,11 +98,7 @@
 -keep class com.baidu.platform.**{*;}
 -keep class com.baidu.location.**{*;}
 -keep class com.baidu.vi.**{*;}
-#Mob短信
--keep class cn.smssdk.**{*;}
--keep class com.mob.**{*;}
--dontwarn com.mob.**
--dontwarn cn.smssdk.**
+
 #ButterKnife
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
@@ -189,5 +188,24 @@ public static java.lang.String TABLENAME;
 
 -dontwarn com.nineoldandroids.*
 -keep class com.nineoldandroids.** { *;}
+
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+-keep public class * extends android.support.v4.**
+
+
+
+
+-dontwarn cn.jpush.**
+
+
+-keep class cn.jpush.** { *; }
+
+
+
 
 

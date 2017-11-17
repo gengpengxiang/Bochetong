@@ -2,33 +2,93 @@ package com.bolong.bochetong.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
-
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import com.bolong.bochetong.fragment.Fragment1;
+import com.bolong.bochetong.fragment.Fragment2;
+import com.bolong.bochetong.fragment.Fragment3;
+import com.bolong.bochetong.fragment.Fragment4;
 import com.bolong.bochetong.utils.StatusBarUtil;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.bolong.bochetong.view.ViewPagerCompat;
+import java.util.ArrayList;
+import java.util.List;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class GuideActivity extends AppCompatActivity {
 
+    @BindView(R.id.viewPager)
+    ViewPagerCompat viewPager;
+    private FragmentPagerAdapter mAdapter;
+    private List<Fragment> mFragments;
+    private Unbinder unbind;
+    private Fragment1 fragment1;
+    private Fragment2 fragment2;
+    private Fragment3 fragment3;
+    private Fragment4 fragment4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_guide);
-        StatusBarUtil.compat(this, Color.parseColor("#2c7bc0"));
+        unbind = ButterKnife.bind(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.compat(this, Color.parseColor("#000000"));
+        }
 
-        final Intent intent = new Intent(this, MainActivity.class); //下一步转向Mainctivity
+        initViews();
+        setSelect(0);
+    }
 
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
+    private void initViews() {
+        mFragments = new ArrayList<Fragment>();
+        fragment1 = new Fragment1();
+        fragment2 = new Fragment2();
+        fragment3 = new Fragment3();
+        fragment4 = new Fragment4();
+        mFragments.add(fragment1);
+        mFragments.add(fragment2);
+        mFragments.add(fragment3);
+        mFragments.add(fragment4);
+
+        mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public void run() {
-                startActivityForResult(intent,1); //执行意图
+            public Fragment getItem(int position) {
+                return mFragments.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return mFragments.size();
             }
         };
-        timer.schedule(task, 1000 * 1); //3秒后跳转，这里根据自己需要设定时间
+        viewPager.setAdapter(mAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    private void setSelect(int i)
+    {
+        viewPager.setCurrentItem(i);
     }
 
     @Override
@@ -36,5 +96,11 @@ public class GuideActivity extends AppCompatActivity {
         if (resultCode == 1) {
             GuideActivity.this.finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbind.unbind();
     }
 }

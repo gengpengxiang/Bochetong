@@ -3,9 +3,6 @@ package com.bolong.bochetong.bean;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by admin on 2017/5/4.
- */
 
 public class Park implements Serializable {
 

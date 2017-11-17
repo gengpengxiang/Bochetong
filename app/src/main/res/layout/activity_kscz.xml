@@ -4,203 +4,248 @@
     android:id="@+id/linear_kscz"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f1f1f1"
+    android:background="@color/deepwhite"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-
-    <TextView
-        android:gravity="center"
-        android:text="欠费补缴金额"
-        android:visibility="gone"
-        android:id="@+id/tv_qfbj"
+    <RelativeLayout
+        android:id="@+id/layout_else"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_heightPercent="50%"
-        />
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_heightPercent="50%">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/bg_kscz_yue" />
+
+        <TextView
+            android:id="@+id/tv_else"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/frame_kscz_yue"
-        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_heightPercent="30%"
-        >
+        android:background="#ffffff"
+        app:layout_heightPercent="30%">
+
         <ImageView
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/bg_kscz_yue"/>
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:src="@mipmap/bg_kscz_yue" />
+
         <TextView
             android:id="@+id/tv_yue"
-            android:textColor="#ffffff"
-            android:textSize="22sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginBottom="15dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="- -"/>
-        <TextView
+            android:text="- -"
             android:textColor="#ffffff"
-            android:layout_marginTop="15dp"
-            android:layout_gravity="center"
+            android:textSize="22sp" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="余额(元)"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="余额(元)"
+            android:textColor="#ffffff" />
     </FrameLayout>
 
 
-    <android.support.percent.PercentRelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/relative_kscz_jine"
-        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
-        android:background="#ffffff"
         android:layout_height="0dp"
-        app:layout_heightPercent="10%"
-        android:layout_below="@id/frame_kscz_yue">
+        android:layout_below="@id/frame_kscz_yue"
+        android:layout_marginTop="8dp"
+        android:background="#ffffff"
+        app:layout_heightPercent="10%">
+
         <Button
             android:id="@+id/bt_kscz_twenty"
-            android:layout_marginLeft="10dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_heightPercent="80%"
-            app:layout_widthPercent="30%"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/bg_kscz_jine_selected"
             android:text="20元"
-            android:background="@mipmap/bg_kscz_jine_selected"/>
+            app:layout_heightPercent="80%"
+            app:layout_widthPercent="30%" />
+
         <Button
             android:id="@+id/bt_kscz_fifth"
-            android:layout_centerInParent="true"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_heightPercent="80%"
-            app:layout_widthPercent="30%"
+            android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:text="50元"
             android:background="@mipmap/bg_kscz_jine_normal"
-            />
+            android:text="50元"
+            app:layout_heightPercent="80%"
+            app:layout_widthPercent="30%" />
+
         <Button
             android:id="@+id/bt_kscz_hundred"
-            android:layout_marginRight="10dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_heightPercent="80%"
-            app:layout_widthPercent="30%"
-            android:layout_centerVertical="true"
-            android:text="100元"
             android:layout_alignParentRight="true"
-            android:background="@mipmap/bg_kscz_jine_normal"/>
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@mipmap/bg_kscz_jine_normal"
+            android:text="100元"
+            app:layout_heightPercent="80%"
+            app:layout_widthPercent="30%" />
     </android.support.percent.PercentRelativeLayout>
 
     <LinearLayout
         android:id="@+id/linear_kscz_edittext"
-        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_below="@id/relative_kscz_jine"
+        android:background="#ffffff"
         android:orientation="vertical"
-        app:layout_heightPercent="10%"
-        android:layout_below="@id/relative_kscz_jine">
-        <!--<Button
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@mipmap/bg_kscz_jine_normal"
-            android:text="输入其他金额"/>-->
+        app:layout_heightPercent="10%">
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <EditText
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:inputType="number"
-            android:background="@drawable/selector_edittext"
-            android:textCursorDrawable="@drawable/shape_edittext"
             android:id="@+id/et"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="5"
+            android:background="@drawable/selector_edittext"
+            android:gravity="center"
             android:hint="请输入其他金额"
-            />
-    </LinearLayout>
+            android:inputType="number"
+            android:textCursorDrawable="@drawable/shape_edittext" />
 
+    </LinearLayout>
 
 
     <!-- 支付相关-->
     <RelativeLayout
         android:id="@+id/relative_kscz_zffs"
-        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_heightPercent="10%"
-        android:layout_below="@id/linear_kscz_edittext">
+        android:layout_below="@id/linear_kscz_edittext"
+        android:background="#ffffff"
+        app:layout_heightPercent="10%">
+
         <TextView
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="支付方式"/>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:text="支付方式" />
     </RelativeLayout>
+
+
     <LinearLayout
+        android:orientation="horizontal"
         android:id="@+id/linear_zhifubao"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/shape"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_heightPercent="8%"
+        android:layout_height="wrap_content"
         android:layout_below="@id/relative_kscz_zffs"
-        android:orientation="vertical">
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        >
+
         <Button
+            android:visibility="gone"
             android:id="@+id/bt_zhifubao"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@mipmap/bg_zhifubao_normal"/>
+            android:layout_height="wrap_content"
+            android:background="@mipmap/bg_zhifubao_normal" />
+
+        <ImageView
+            android:id="@+id/iv_zhifubao"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/icon_zhifubao_checked"/>
+        <TextView
+            android:textColor="@color/babyblack"
+            android:id="@+id/tv_zhifubao"
+            android:padding="10dp"
+            android:text="支付宝"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
+
     <LinearLayout
-        android:visibility="gone"
+        android:background="@color/white"
+        android:orientation="horizontal"
         android:id="@+id/linear_weixin"
-        android:layout_marginTop="1dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_heightPercent="8%"
+        android:layout_height="wrap_content"
         android:layout_below="@id/linear_zhifubao"
-        android:orientation="vertical">
+        android:layout_marginTop="1dp">
+
+        <ImageView
+            android:id="@+id/iv_weixin"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/icon_weixin_normal"/>
+        <TextView
+            android:textColor="@color/deepgray"
+            android:id="@+id/tv_weixin"
+            android:padding="10dp"
+            android:text="微信"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <Button
+            android:visibility="gone"
             android:id="@+id/bt_weixin"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@mipmap/bg_weixin_normal"/>
+            android:layout_height="wrap_content"
+            android:background="@mipmap/bg_weixin_normal" />
     </LinearLayout>
-
 
     <LinearLayout
-        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_below="@id/linear_weixin"
         android:layout_marginTop="1dp"
         android:background="#ffffff"
-        android:layout_width="match_parent"
-        app:layout_heightPercent="10%"
-        android:layout_below="@id/linear_weixin"
-        android:layout_weight="2.5">
+        android:gravity="center_vertical"
+        app:layout_heightPercent="10%">
+
         <Button
+            android:layout_gravity="center"
             android:id="@+id/bt_chongzhi"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@mipmap/bg_kscz_chongzhi"
-            android:text="充值"/>
+            android:text="充值"
+            android:textColor="#ffffff" />
     </LinearLayout>
-
 
 
 

@@ -5,108 +5,168 @@
     android:id="@+id/activity_bcxq"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/gray"
+    android:visibility="gone"
     tools:context="com.bolong.bochetong.activity.BcxqActivity">
 
-        <RelativeLayout
-            android:id="@+id/layout_photo"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_heightPercent="30%"
-            android:background="#f1f1f1">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/bg_bcxq_nophoto" />
-        </RelativeLayout>
-
-    <!--导航图标 -->
     <ImageView
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
+        android:id="@+id/iv_parkphoto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        app:layout_heightPercent="30%" />
+
+    <ScrollView
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:layout_below="@id/iv_parkphoto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="70%">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+    <LinearLayout
+        android:layout_marginTop="3dp"
+        android:id="@+id/layout_business"
+        android:paddingLeft="40dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/icon_main_kq"/>
+        android:paddingTop="30dp"
+        android:orientation="vertical"
+        android:background="@color/white">
+        <TextView
+            android:drawablePadding="10dp"
+            android:drawableLeft="@mipmap/icon_parkinfo_business"
+            android:drawableRight="@mipmap/icon_parkinfo_bct"
+            android:text="商家信息"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="10dp"
+            android:text="地址"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:text="余位: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/tv_carPort"
+                android:text="33个"
+                android:textColor="@color/blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_distance"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="5dp"
+            android:text="距我1km"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:layout_marginTop="1dp"
+        android:id="@+id/layout_standard"
+        android:paddingLeft="40dp"
+        android:layout_below="@id/layout_business"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:drawablePadding="10dp"
+            android:drawableLeft="@mipmap/icon_parkinfo_wallet"
+            android:text="收费标准"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <android.support.percent.PercentRelativeLayout
-            android:background="@drawable/shape_notopframe"
-            android:id="@+id/layout_chewei"
+            android:id="@+id/layout_price"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:paddingLeft="30dp"
-            android:layout_below="@id/layout_photo"
-            app:layout_heightPercent="20%">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="10dp"
+            android:paddingRight="50dp"
+            android:background="@drawable/shape_layout_white">
+
             <TextView
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_heightPercent="50%"
-                android:text="惠康家园九块地"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/tv_zong"
-                android:gravity="center"
-                android:layout_alignParentBottom="true"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_heightPercent="50%"
-                app:layout_widthPercent="30%"
-                android:text="88车位"/>
-            <TextView
-                android:id="@+id/kong"
-                android:layout_toRightOf="@id/tv_zong"
-                android:gravity="center"
-                android:layout_alignParentBottom="true"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_heightPercent="50%"
-                app:layout_widthPercent="30%"
-                android:text="22车位"/>
-            <TextView
-                android:layout_toRightOf="@id/kong"
-                android:gravity="center"
-                android:layout_alignParentBottom="true"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_heightPercent="50%"
-                app:layout_widthPercent="30%"
-                android:text="1km"/>
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="10dp"
+                android:text="00:00-24:00 8元/小时" />
+
         </android.support.percent.PercentRelativeLayout>
-    <TextView
-        android:background="@drawable/shape_notopframe"
-        android:gravity="center_vertical"
-        android:paddingLeft="30dp"
-        android:layout_below="@id/layout_chewei"
-        android:id="@+id/tv_address"
+
+    </LinearLayout>
+    <LinearLayout
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:layout_marginTop="1dp"
+        android:paddingLeft="40dp"
+        android:layout_below="@id/layout_standard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_heightPercent="10%"
-        android:textStyle="bold"
-        android:text="地址:永定镇-石担路"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:drawablePadding="10dp"
+            android:drawableLeft="@mipmap/icon_parkinfo_introduce"
+            android:text="停车场介绍"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:paddingRight="50dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/tv_reference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="10dp"
+            android:text="20分钟内免费停车" />
+    </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/view"
+        android:layout_marginRight="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="10dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="25%"
         />
-    <RelativeLayout
-        android:paddingLeft="30dp"
-        android:layout_below="@id/tv_address"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/shape_notopframe"
-        app:layout_heightPercent="10%">
-        <TextView
-            android:id="@+id/tv_zffs"
-            android:textStyle="bold"
-            android:gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="支付方式"/>
-        <TextView
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@id/tv_zffs"
-            android:textStyle="bold"
-            android:gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textColor="#749bfd"
-            android:text="APP支付/现金支付"/>
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/bt_navi"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_below="@id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_parkinfo_navi"/>
+
 </android.support.percent.PercentRelativeLayout>

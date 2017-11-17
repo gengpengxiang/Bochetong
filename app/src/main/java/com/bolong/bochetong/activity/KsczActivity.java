@@ -12,42 +12,58 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.alipay.sdk.app.PayTask;
 import com.bolong.bochetong.bean.User;
-import com.bolong.bochetong.pay.AuthResult;
-import com.bolong.bochetong.pay.H5PayDemoActivity;
-import com.bolong.bochetong.pay.PayResult;
+import com.bolong.bochetong.bean2.MsgEvent;
+import com.bolong.bochetong.bean2.Wallet;
+import com.bolong.bochetong.pay.WxEntity;
 import com.bolong.bochetong.utils.HttpUtils;
 import com.bolong.bochetong.utils.Param;
+import com.bolong.bochetong.utils.PayUtils;
 import com.bolong.bochetong.utils.SharedPreferenceUtil;
 import com.bolong.bochetong.utils.SoftKeyboardStateHelperUtil;
+import com.bolong.bochetong.utils.ToastUtil;
 import com.bolong.bochetong.view.CustomPopDialog;
-
+import com.google.gson.Gson;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
+import static com.bolong.bochetong.activity.wxapi.WXPayEntryActivity.ACTION_WXPAY_SUCCESS;
+import static com.bolong.bochetong.utils.PayUtils.ACTION_ALIPAY_FAILURE;
 
 public class KsczActivity extends BaseActivity {
 
+    @BindView(R.id.tv_else)
+    TextView tvElse;
+    @BindView(R.id.layout_else)
+    RelativeLayout layoutElse;
+    @BindView(R.id.tv_zhifubao)
+    TextView tvZhifubao;
+    @BindView(R.id.tv_weixin)
+    TextView tvWeixin;
+    @BindView(R.id.iv_zhifubao)
+    ImageView ivZhifubao;
+    @BindView(R.id.iv_weixin)
+    ImageView ivWeixin;
     private Unbinder unbinder;
     @BindView(R.id.frame_kscz_yue)
     FrameLayout frameKsczYue;
@@ -77,17 +93,22 @@ public class KsczActivity extends BaseActivity {
     private String shoudPay;
     private String monthlyPrice;
     private String cardId;
+    private String renewalFee;
+    private String orderid;
+    private String yuE;
+    public static final int ACTION_WXSENDREQ = 333;
+    public static final int ACTION_ALIPAY_SUCCESS = 3333;
+    private WxEntity wxEntity;
+    private String symbol;
 
     @Override
     public void onBaseCreate(Bundle bundle) {
         setContentViewId(R.layout.activity_kscz);
-        //
+        EventBus.getDefault().register(this);
         flagZhifubao = false;
         flagWeixin = false;
-
         unbinder = ButterKnife.bind(this);
         SharedPreferenceUtil.putString("jine", "20");
-        //EditText焦点改变时执行的方法.不宜用onClick()
         et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -99,7 +120,7 @@ public class KsczActivity extends BaseActivity {
                     SharedPreferenceUtil.removeString("jine");
 
                 } else {
-                    Log.e("Tag", "+++");
+
                 }
             }
         });
@@ -129,38 +150,36 @@ public class KsczActivity extends BaseActivity {
         flagZhifubao = true;
         flagWeixin = false;
 
-        getYuE();
-
+        //getYuE();
         setContent();
     }
 
     private void setContent() {
         Intent intent = getIntent();
         shoudPay = intent.getStringExtra("shoudPay");
-//        monthlyPrice = intent.getStringExtra("monthlyPrice");
+        monthlyPrice = intent.getStringExtra("monthlyPrice");
+        renewalFee = intent.getStringExtra("renewalFee");
         cardId = intent.getStringExtra("cardId");
-        // Log.e("月卡",cardId);
-        if (shoudPay != null) {
+        orderid = intent.getStringExtra("orderid");
+        yuE = intent.getStringExtra("money");
 
-            TextView tv_qfbj = (TextView) findViewById(R.id.tv_qfbj);
-            tv_qfbj.setText("补缴金额为" + shoudPay + "元");
-            tv_qfbj.setVisibility(View.VISIBLE);
+        tvYue.setText(yuE);
+        if (shoudPay != null) {
+            tvElse.setText(shoudPay + "元");
+            layoutElse.setVisibility(View.VISIBLE);
             frameKsczYue.setVisibility(View.INVISIBLE);
             relativeKsczJine.setVisibility(View.INVISIBLE);
             linearKsczEdittext.setVisibility(View.INVISIBLE);
         }
         if (cardId != null) {
 
-            TextView tv_qfbj = (TextView) findViewById(R.id.tv_qfbj);
-            tv_qfbj.setText("月卡id是" + cardId+"续费金额为150元");
-            tv_qfbj.setVisibility(View.VISIBLE);
+            tvElse.setText(renewalFee + "元");
+            layoutElse.setVisibility(View.VISIBLE);
             frameKsczYue.setVisibility(View.INVISIBLE);
             relativeKsczJine.setVisibility(View.INVISIBLE);
             linearKsczEdittext.setVisibility(View.INVISIBLE);
         }
-
     }
-
 
     private void getYuE() {
         String uid = null;
@@ -179,12 +198,6 @@ public class KsczActivity extends BaseActivity {
         HttpUtils.post(Param.NOTECASE, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
             }
 
             @Override
@@ -193,12 +206,14 @@ public class KsczActivity extends BaseActivity {
                 Log.e("钱包明细", jsonDatas);
                 try {
                     try {
+                        Gson gson0 = new Gson();
+                        Wallet wallet = gson0.fromJson(jsonDatas, Wallet.class);
+                        Wallet.ContentBean content0 = wallet.getContent();
+                        final String accountBalance = content0.getAccountBalance();
+
                         JSONObject jsonObject = new JSONObject(jsonDatas);
                         String content = jsonObject.optString("content");
                         JSONObject jb = new JSONObject(content);
-                        //余额
-                        final String accountBalance = jb.optString("accountBalance");
-                        SharedPreferenceUtil.putString("yue", accountBalance);
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -240,11 +255,25 @@ public class KsczActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        setTitle("快速充值");
+        if (getIntent() == null) {
+            setTitle("快速充值");
+        }else {
+            Intent intent = getIntent();
+            symbol = intent.getStringExtra("symbol");
+            if (symbol.equals("yearCard")) {
+                setTitle("年卡续费");
+            }
+            if(symbol.equals("normal")){
+                setTitle("快速充值");
+            }
+            if(symbol.equals("arrearage")){
+                setTitle("欠费补缴");
+            }
+        }
     }
 
 
-    @OnClick({R.id.bt_kscz_twenty, R.id.bt_kscz_fifth, R.id.bt_kscz_hundred, R.id.bt_zhifubao, R.id.bt_weixin, R.id.bt_chongzhi})
+    @OnClick({R.id.bt_kscz_twenty, R.id.bt_kscz_fifth, R.id.bt_kscz_hundred, R.id.tv_zhifubao, R.id.tv_weixin, R.id.bt_chongzhi})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_kscz_twenty:
@@ -261,8 +290,6 @@ public class KsczActivity extends BaseActivity {
                 btKsczHundred.setBackgroundResource(R.mipmap.bg_kscz_jine_normal);
                 SharedPreferenceUtil.putString("jine", "50");
 
-                //pay("1","50");
-
                 break;
             case R.id.bt_kscz_hundred:
                 clearEditText();
@@ -271,72 +298,80 @@ public class KsczActivity extends BaseActivity {
                 btKsczHundred.setBackgroundResource(R.mipmap.bg_kscz_jine_selected);
                 SharedPreferenceUtil.putString("jine", "100");
 
-                //pay("1","100");
-
                 break;
-            case R.id.bt_zhifubao:
-                btZhifubao.setBackgroundResource(R.mipmap.bg_zhifubao_checked);
-                btWeixin.setBackgroundResource(R.mipmap.bg_weixin_normal);
+            case R.id.tv_zhifubao:
+                tvWeixin.setTextColor(getResources().getColor(R.color.deepgray));
+                tvZhifubao.setTextColor(getResources().getColor(R.color.babyblack));
+
+                ivZhifubao.setBackgroundResource(R.mipmap.icon_zhifubao_checked);
+                ivWeixin.setBackgroundResource(R.mipmap.icon_weixin_normal);
                 flagZhifubao = true;
                 flagWeixin = false;
                 break;
-            case R.id.bt_weixin:
-                btWeixin.setBackgroundResource(R.mipmap.bg_weixin_checked);
-                btZhifubao.setBackgroundResource(R.mipmap.bg_zhifubao_normal);
-                flagWeixin = true;
-                flagZhifubao = false;
+            case R.id.tv_weixin:
+                if (PayUtils.isWXAppInstalledAndSupported(getApplicationContext())) {
+
+                    tvZhifubao.setTextColor(getResources().getColor(R.color.deepgray));
+                    tvWeixin.setTextColor(getResources().getColor(R.color.babyblack));
+
+                    ivWeixin.setBackgroundResource(R.mipmap.icon_weixin_checked);
+                    ivZhifubao.setBackgroundResource(R.mipmap.icon_zhifubao_normal);
+                    flagWeixin = true;
+                    flagZhifubao = false;
+                } else {
+                    ToastUtil.showShort(this, "您未安装微信客户端");
+                }
                 break;
             case R.id.bt_chongzhi:
                 setResult(1);
                 recharge();
-
                 break;
         }
     }
+
+
 
     private void recharge() {
         if (!flagZhifubao && !flagWeixin) {
             Toast.makeText(KsczActivity.this, "请选择充值方式", Toast.LENGTH_SHORT).show();
         }
         if (flagZhifubao) {
+            if (!TextUtils.isEmpty(et.getText())) {
+                SharedPreferenceUtil.putString("jine", et.getText().toString());
+            }
+            //aliPay();
+            String price = SharedPreferenceUtil.getString("jine", "0");
+
+            if (price != null && shoudPay == null && cardId == null) {
+                PayUtils.aliPay(KsczActivity.this,price,"1","","","");
+            }
+            if (cardId != null) {
+                PayUtils.aliPay(KsczActivity.this,"","4","",cardId,"");
+            }
+            if (shoudPay != null) {
+                PayUtils.aliPay(KsczActivity.this,"","2",orderid,"","");
+            }
+
+
+        }
+
+        if (flagWeixin) {
             if (TextUtils.isEmpty(et.getText()) == false) {
                 SharedPreferenceUtil.putString("jine", et.getText().toString());
             }
+            //wxPay();
+
             String price = SharedPreferenceUtil.getString("jine", "0");
             if (price != null && shoudPay == null && cardId == null) {
-                pay("1", price);
-                //Toast.makeText(KsczActivity.this, price + "支付宝", Toast.LENGTH_SHORT).show();
-                /*Intent intent = new Intent(KsczActivity.this,ToastActivity.class);
-                startActivity(intent);*/
-                //showDialog();
-            }
-            if (price == null) {
-                Toast.makeText(KsczActivity.this, "充值数额不能为0", Toast.LENGTH_SHORT).show();
-            }
-            if (shoudPay != null) {
-                Log.e("充值界面的金额",shoudPay);
-                pay("3", shoudPay);
+                PayUtils.wxPay(KsczActivity.this,price,"1","","","");
             }
             if (cardId != null) {
-                payYk("1", cardId);
-
+                PayUtils.wxPay(KsczActivity.this,"","4","",cardId,"");
+            }
+            if (shoudPay != null) {
+                PayUtils.wxPay(KsczActivity.this,"","2",orderid,"","");
             }
         }
-        //
-//        if (flagWeixin) {
-//            if (TextUtils.isEmpty(et.getText()) == false) {
-//                SharedPreferenceUtil.putString("jine", et.getText().toString());
-//            }
-//            String price = SharedPreferenceUtil.getString("jine", null);
-//            if (price != null) {
-//                pay("1", price);
-//                Toast.makeText(KsczActivity.this, price + "微信", Toast.LENGTH_SHORT).show();
-//                //Toast.makeText(KsczActivity.this, str+"支付宝", Toast.LENGTH_SHORT).show();
-//                //showDialog();
-//            } else {
-//                Toast.makeText(KsczActivity.this, "充值数额不能为0", Toast.LENGTH_SHORT).show();
-//            }
-//        }
 
     }
 
@@ -348,8 +383,14 @@ public class KsczActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         unbinder.unbind();
     }
 
@@ -360,304 +401,51 @@ public class KsczActivity extends BaseActivity {
         dialog.show();
     }
 
-    private static final int SDK_PAY_FLAG = 1;
-    private static final int SDK_AUTH_FLAG = 2;
-    private Handler mHandler = new Handler() {
-        @SuppressWarnings("unused")
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SDK_PAY_FLAG: {
-                    @SuppressWarnings("unchecked")
-                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
-                    /**
-                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
-                     */
-                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
-                    String resultStatus = payResult.getResultStatus();
-                    // 判断resultStatus 为9000则代表支付成功
-                    if (TextUtils.equals(resultStatus, "9000")) {
-                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-//                        Toast.makeText(KsczActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-                        showDialog();
-                    } else {
-                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        Toast.makeText(KsczActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                }
-                case SDK_AUTH_FLAG: {
-                    @SuppressWarnings("unchecked")
-                    AuthResult authResult = new AuthResult((Map<String, String>) msg.obj, true);
-                    String resultStatus = authResult.getResultStatus();
-
-                    // 判断resultStatus 为“9000”且result_code
-                    // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
-                    if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
-                        // 获取alipay_open_id，调支付时作为参数extern_token 的value
-                        // 传入，则支付账户为该授权账户
-                        Toast.makeText(KsczActivity.this,
-                                "授权成功\n" + String.format("authCode:%s", authResult.getAuthCode()), Toast.LENGTH_SHORT)
-                                .show();
-                    } else {
-                        // 其他状态值则为授权失败
-                        Toast.makeText(KsczActivity.this,
-                                "授权失败" + String.format("authCode:%s", authResult.getAuthCode()), Toast.LENGTH_SHORT).show();
-
-                    }
-                    break;
-                }
-                default:
-                    break;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateUI(MsgEvent event) {
+        if (event.getAction() == ACTION_WXPAY_SUCCESS) {
+            showDialog();
+            getYuE();
+        }
+        if (event.getAction() == ACTION_WXSENDREQ) {
+            String appId = event.getStr();
+            Log.e("appid", appId);
+            IWXAPI api = WXAPIFactory.createWXAPI(KsczActivity.this, appId, true);
+            api.registerApp(appId);
+            PayReq payReq = new PayReq();
+            payReq.appId = wxEntity.getAppid();
+            payReq.partnerId = wxEntity.getPartnerid();
+            payReq.prepayId = wxEntity.getPrepayid();
+            payReq.packageValue = wxEntity.getPackageX();
+            payReq.nonceStr = wxEntity.getNoncestr();
+            payReq.timeStamp = wxEntity.getTimestamp();
+            payReq.sign = wxEntity.getSign();
+            //
+            if (api == null) {
+                Log.e("空", "api");
+                api = WXAPIFactory.createWXAPI(KsczActivity.this, wxEntity.getAppid());
+                api.registerApp(wxEntity.getAppid());
+                api.sendReq(payReq);
+            } else {
+                Log.e("不空", "api");
+                api.sendReq(payReq);
+                Log.e("不空2", "API");
             }
         }
-
-        ;
-    };
-
-    private void pay(String orderType, String rmb) {
-        //获取订单
-        String uid = null;
-        String token = null;
-        if (SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo") != null) {
-            User user = (User) SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo");
-            uid = user.getUserId();
-            token = user.getToken();
-        } else {
-            uid = Param.UID;
-            token = Param.TOKEN;
+        if (event.getAction() == ACTION_ALIPAY_SUCCESS) {
+            showDialog();
+            getYuE();
         }
-        Map<String, String> map = new HashMap<>();
-        map.put("uid", uid);
-        map.put("token", token);
-        map.put("orderType", orderType);
-        map.put("price", rmb);
-        Log.e("新支付金额", rmb);
-        HttpUtils.post(Param.ALIPAY, new Callback() {
-            public String orderInfo;
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("onFailure","onFailure");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String jsonDatas = response.body().string();
-                Log.e("数据", jsonDatas);
-                try {
-                    try {
-                        JSONObject jsonObject = new JSONObject(jsonDatas);
-                        String content = jsonObject.optString("content");
-                        Log.e("content", content);
-                        JSONObject jb = new JSONObject(content);
-                        orderInfo = jb.optString("orderStr");
-                        Log.e("Info", orderInfo);
-
-                        Runnable payRunnable = new Runnable() {
-
-                            @Override
-                            public void run() {
-                                PayTask alipay = new PayTask(KsczActivity.this);
-                                Map<String, String> result = alipay.payV2(orderInfo, true);
-                                Log.i("msp", result.toString());
-
-                                Message msg = new Message();
-                                msg.what = SDK_PAY_FLAG;
-                                msg.obj = result;
-                                mHandler.sendMessage(msg);
-                            }
-                        };
-
-                        Thread payThread = new Thread(payRunnable);
-                        payThread.start();
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-
-                }
-
-            }
-        }, map);
-
-
-    }
-
-
-    /**
-     * get the sdk version. 获取SDK版本号
-     */
-    public void getSDKVersion() {
-        PayTask payTask = new PayTask(this);
-        String version = payTask.getVersion();
-        Toast.makeText(this, version, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 原生的H5（手机网页版支付切natvie支付） 【对应页面网页支付按钮】
-     *
-     * @param v
-     */
-    public void h5Pay(View v) {
-        Intent intent = new Intent(this, H5PayDemoActivity.class);
-        Bundle extras = new Bundle();
-        /**
-         * url是测试的网站，在app内部打开页面是基于webview打开的，demo中的webview是H5PayDemoActivity，
-         * demo中拦截url进行支付的逻辑是在H5PayDemoActivity中shouldOverrideUrlLoading方法实现，
-         * 商户可以根据自己的需求来实现
-         */
-        String url = "http://m.taobao.com";
-        // url可以是一号店或者淘宝等第三方的购物wap站点，在该网站的支付过程中，支付宝sdk完成拦截支付
-        extras.putString("url", url);
-        intent.putExtras(extras);
-        startActivity(intent);
-    }
-
-    private String urlPayYk = Param.IP + "/app/alipay/extendedPay";
-
-    private void payYk(String s, String cardId) {
-        String uid = null;
-        String token = null;
-        if (SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo") != null) {
-            User user = (User) SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo");
-            uid = user.getUserId();
-            token = user.getToken();
-        } else {
-            uid = Param.UID;
-            token = Param.TOKEN;
+        if (event.getAction() == ACTION_ALIPAY_FAILURE) {
+            ToastUtil.showShort(KsczActivity.this,"支付失败");
         }
-        Map<String, String> map = new HashMap<>();
-        map.put("uid", uid);
-        map.put("token", token);
-        map.put("orderType", s);
-        map.put("submitNo", cardId);
-        Log.e("月卡1", cardId);
-        HttpUtils.post(urlPayYk, new Callback() {
-            public String orderInfo;
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String jsonDatas = response.body().string();
-                Log.e("数据", jsonDatas);
-                try {
-                    try {
-                        JSONObject jsonObject = new JSONObject(jsonDatas);
-                        String content = jsonObject.optString("content");
-                        Log.e("content", content);
-
-
-                        JSONObject jb = new JSONObject(content);
-                        orderInfo = jb.optString("orderStr");
-                        Log.e("月卡2", orderInfo);
-
-                        Runnable payRunnable = new Runnable() {
-
-                            @Override
-                            public void run() {
-                                PayTask alipay = new PayTask(KsczActivity.this);
-                                Map<String, String> result = alipay.payV2(orderInfo, true);
-                                Log.i("msp", result.toString());
-                                Message msg = new Message();
-                                msg.what = SDK_PAY_FLAG;
-                                msg.obj = result;
-                                mHandler.sendMessage(msg);
-                            }
-                        };
-
-                        Thread payThread = new Thread(payRunnable);
-                        payThread.start();
-
-                        setResult(1);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.e("catch1", "1111");
-                    }
-                } catch (Exception e) {
-                    Log.e("catch2", "2222");
-                }
-
-            }
-        }, map);
-
-
-
     }
-//    private void payYk(int i, String cardId) {
-//        String uid = null;
-//        String token = null;
-//        if (SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo") != null) {
-//            User user = (User) SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo");
-//            uid = user.getUserId();
-//            token = user.getToken();
-//        } else {
-//            uid = Param.UID;
-//            token = Param.TOKEN;
-//        }
-//        OkHttpClient client = new OkHttpClient();
-//        RequestBody body = new FormBody.Builder()
-//                .add("uid", uid)
-//                .add("token", token)
-//                .add("orderType", String.valueOf(i))
-//                .add("submitNo", cardId)
-//                .build();
-//
-//        Request request = new Request.Builder()
-//                .url(urlPayYk)
-//                .post(body)
-//                .build();
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                String jsonDatas = response.body().string();
-//                Log.e("数据", jsonDatas);
-//                try {
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(jsonDatas);
-//                        String content = jsonObject.optString("content");
-//                        Log.e("content", content);
-//
-//
-//                        JSONObject jb = new JSONObject(content);
-//                        orderInfo = jb.optString("orderStr");
-//                        Log.e("Info", orderInfo);
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                } catch (Exception e) {
-//
-//                }
-//            }
-//        });
-//        Runnable payRunnable = new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                PayTask alipay = new PayTask(KsczActivity.this);
-//                Map<String, String> result = alipay.payV2(orderInfo, true);
-//                Log.i("msp", result.toString());
-//
-//                Message msg = new Message();
-//                msg.what = SDK_PAY_FLAG;
-//                msg.obj = result;
-//                mHandler.sendMessage(msg);
-//            }
-//        };
-//
-//        Thread payThread = new Thread(payRunnable);
-//        payThread.start();
-//    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

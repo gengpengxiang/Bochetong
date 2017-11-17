@@ -7,8 +7,8 @@
     tools:context="com.bolong.bochetong.activity.GuideActivity">
 
 
-    <ImageView
+    <com.bolong.bochetong.view.ViewPagerCompat
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/bg_guide"/>
+        android:layout_height="match_parent" />
 </RelativeLayout>

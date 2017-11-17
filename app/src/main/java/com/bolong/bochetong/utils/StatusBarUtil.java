@@ -8,10 +8,6 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by lenovo on 2017/3/29.
- */
-
 public class StatusBarUtil {
     private static final int INVALID_VAL = -1;
     private static final int COLOR_DEFAULT = Color.parseColor("#20000000");

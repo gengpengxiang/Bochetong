@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.percent.PercentRelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.4"
+        android:paddingBottom="5dp"
+        android:background="@color/deepwhite">
+
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:id="@+id/tv_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:drawableRight="@mipmap/icon_arrow_down" />
+            <TextView
+                android:layout_marginTop="15dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="铂车通"/>
+
+        <RelativeLayout
+            android:layout_marginTop="15dp"
+            android:id="@+id/layout_wd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            app:layout_widthPercent="20%"
+            >
+            <ImageView
+                android:id="@+id/icon_wd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/icon_user" />
+        </RelativeLayout>
+
+        <android.support.percent.PercentRelativeLayout
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_heightPercent="40%"
+            android:background="@drawable/bg_edittext_normal"
+            >
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/iv_searchview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_search"/>
+            <com.bolong.bochetong.view.MyEditText
+                android:layout_marginRight="10dp"
+                android:drawableRight="@mipmap/icon_edittext_clear"
+                android:theme="@style/MyEditText"
+                android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                android:layout_centerVertical="true"
+                android:id="@+id/et_park"
+                android:layout_toRightOf="@id/iv_searchview"
+                android:paddingLeft="10dp"
+                android:background="@null"
+                android:textCursorDrawable="@drawable/shape_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </android.support.percent.PercentRelativeLayout>
+
+    </android.support.percent.PercentRelativeLayout>
+
+
+
+    <android.support.percent.PercentRelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+
+        <com.stx.xhb.xbanner.XBanner xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:visibility="visible"
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#e4f0ff"
+            app:AutoPlayTime="3000"
+            app:isShowIndicatorOnlyOne="true"
+            app:pageChangeDuration="800"
+            app:pointsPosition="CENTER"
+            app:tipTextSize="12sp" />
+
+
+        <android.support.percent.PercentRelativeLayout
+            android:visibility="gone"
+            android:id="@+id/layout_timer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_heightPercent="80%">
+
+            <RelativeLayout
+                android:id="@+id/layout_sign"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_widthPercent="40%">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@mipmap/icon_sign" />
+            </RelativeLayout>
+
+            <android.support.percent.PercentRelativeLayout
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_toRightOf="@id/layout_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:visibility="invisible"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="18sp"
+                    android:textColor="@color/blue"
+                    android:text="正在停车"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <!--<TextView
+                    android:visibility="visible"
+                    android:gravity="bottom"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_park_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_heightPercent="33%"
+                    android:text="—已停100天100小时—" />-->
+
+                <LinearLayout
+                    android:gravity="bottom"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/layout_diffTime"
+                    app:layout_heightPercent="33%"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:visibility="visible"
+                        android:gravity="bottom"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/tv_park_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—已停" />
+                    <TextView
+                        android:textSize="20sp"
+                        android:text="0"
+                        android:textColor="@color/blue"
+                        android:id="@+id/tv_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="天"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="20sp"
+                        android:text="0"
+                        android:textColor="@color/blue"
+                        android:id="@+id/tv_hour"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="小时"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="20sp"
+                        android:text="0"
+                        android:textColor="@color/blue"
+                        android:id="@+id/tv_minute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="分钟—"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/layout_price"
+                    android:layout_below="@id/layout_diffTime"
+                    app:layout_heightPercent="33%"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        android:gravity="center"
+                        android:id="@+id/tv_park_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/blue"
+                        android:textSize="20sp"
+                        android:text="100.0" />
+                    <TextView
+                        android:paddingLeft="3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="元"/>
+                </LinearLayout>
+               <!-- <TextView
+                    android:visibility="visible"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_park_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_heightPercent="33%"
+                    android:layout_below="@id/tv_park_time"
+                    android:text="100元" />-->
+
+                <TextView
+                    android:gravity="top"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_park_entertime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layout_price"
+                    android:background="@drawable/shape_item_time"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:text="入场时间 : ..."
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="@color/white"
+                     />
+            </android.support.percent.PercentRelativeLayout>
+
+        </android.support.percent.PercentRelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            android:background="#5084ed"
+            app:layout_heightPercent="20%">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:id="@+id/tv_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:text=""
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </android.support.percent.PercentRelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:background="@color/gray" />
+
+
+    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+        android:id="@+id/mRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:background="@color/gray"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+    <RelativeLayout
+        android:id="@+id/layout_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/iv_view"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

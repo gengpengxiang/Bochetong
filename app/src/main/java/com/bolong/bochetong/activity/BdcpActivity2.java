@@ -16,18 +16,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.bolong.bochetong.bean.CarPlate;
-import com.bolong.bochetong.bean.CarPlateDao;
 import com.bolong.bochetong.bean.User;
+import com.bolong.bochetong.bean2.MsgEvent;
 import com.bolong.bochetong.utils.HttpUtils;
-import com.bolong.bochetong.utils.JsonValidatorUtils;
-import com.bolong.bochetong.utils.ListDataSave;
-import com.bolong.bochetong.utils.NetworkAvailableUtils;
 import com.bolong.bochetong.utils.Param;
 import com.bolong.bochetong.utils.SharedPreferenceUtil;
+import com.bolong.bochetong.utils.ToastUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,7 +32,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -45,7 +41,6 @@ import butterknife.Unbinder;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
 
 public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeListener, View.OnTouchListener {
     private Unbinder unbinder;
@@ -70,44 +65,28 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
 
     String license = "";
 
-
     private EditText[] mArray;
     private Context mContext;
     private KeyboardView mKeyboardView;
-    /**
-     * 省份简称键盘
-     */
     private Keyboard province_keyboard;
-    /**
-     * 数字与大写字母键盘
-     */
     private Keyboard number_keyboar;
-
-    /**
-     * 判定是否是中文的正则表达式 [\\u4e00-\\u9fa5]判断一个中文 [\\u4e00-\\u9fa5]+多个中文
-     * //
-     */
-//    private String reg = "[\\u4e00-\\u9fa5]";
     private EditText currentEdit;
     private int currentIndex;
-    //保存车牌相关
-    private CarPlateDao mCardPlateDao;
-    private CarPlate carPlate;
+    private String symbol;
+    private String cardId;
+    public static final int ACTION_ADDMONTHCAR_SUCCESS = 4875;
+    public static final int ACTION_ADDYK_SUCCESS = 487569875;
+    public static final int ACTION_BUY_BIND_SUCCESS = 487565557;
+    private int position;
 
     @Override
     public void onBaseCreate(Bundle bundle) {
-        mCardPlateDao = MyApplication.getInstance().getDaoSession().getCarPlateDao();
         setContentViewId(R.layout.activity_bdcp2);
 
         unbinder = ButterKnife.bind(this);
-
         btBind.setEnabled(false);
-        //add
-
 
         mContext = this;
-
-        //dataSave = new ListDataSave(getApplicationContext(), "baiyu");
         province_keyboard = new Keyboard(mContext, R.xml.province_abbreviation);
         number_keyboar = new Keyboard(mContext, R.xml.number_or_letters);
         mKeyboardView = (KeyboardView)
@@ -141,8 +120,6 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
         edit4.setOnTouchListener(this);
         edit5.setOnTouchListener(this);
         edit6.setOnTouchListener(this);
-        //add
-
 
         for (int i = 0; i < mArray.length; i++) {
             final int j = i;
@@ -151,20 +128,15 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
                 private CharSequence temp;
                 private int sStart;
                 private int sEnd;
-
                 @Override
                 public void onTextChanged(CharSequence s, int start,
                                           int before, int count) {
                     temp = s;
                 }
-
                 @Override
                 public void beforeTextChanged(CharSequence s, int start,
                                               int count, int after) {
-
-
                 }
-
                 @Override
                 public void afterTextChanged(Editable s) {
                     sStart = mArray[j].getSelectionStart();
@@ -174,7 +146,6 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
                         mArray[j + 1].setFocusable(true);
                         mArray[j + 1].setFocusableInTouchMode(true);
                         mArray[j + 1].requestFocus();
-
                     }
                     //新内容替换旧内容
                     if (temp.length() > 1) {
@@ -183,95 +154,142 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
                         mArray[j].setText(s);
                         mArray[j].setSelection(tSelection);
                         mArray[j].setFocusable(true);
-
                     }
-
                     if (editProvince.getText().length() == 1 && edit1.getText().length() == 1 && edit2.getText().length() == 1 && edit3.getText().length() == 1
                             && edit4.getText().length() == 1 && edit5.getText().length() == 1 && edit6.getText().length() == 1) {
                         btBind.setEnabled(true);
-                       /* for (int i = 0; i < mArray.length; i++) {
-                            license += mArray[i].getText().toString();
-                        }*/
-                        license = editProvince.getText().toString() + "-" + edit1.getText().toString() + edit2.getText().toString() + edit3.getText().toString()
+                        license = editProvince.getText().toString() + edit1.getText().toString() + edit2.getText().toString() + edit3.getText().toString()
                                 + edit4.getText().toString() + edit5.getText().toString() + edit6.getText().toString();
-
                     } else {
                         btBind.setEnabled(false);
                     }
-
-
                 }
-
             });
-
-
         }
-
-
         editProvince.setFocusable(true);
         editProvince.requestFocus();
     }
 
     @Override
     public void initView() {
-        setTitle("绑定车牌");
-    }
+        if (getIntent() == null) {
+            setTitle("绑定车牌");
+        } else {
+            Intent intent = getIntent();
+            symbol = intent.getStringExtra("symbol");
+            if(symbol.equals("normal")){
+                setTitle("绑定车牌");
+            }
+            if (symbol.equals("yearCard")) {
+                Log.e("执行","true");
+                setTitle("绑定年卡车");
+                cardId = intent.getStringExtra("yearCardCar");
+                position = intent.getIntExtra("position",0);
+                Log.e("执行","true2");
+            }
+            if (symbol.equals("monthCard")) {
+                setTitle("绑定月卡车");
+                cardId = intent.getStringExtra("monthCardCar");
+                position = intent.getIntExtra("position",0);
+            }else {
+                //setTitle("绑定车牌");
+            }
+        }
 
+    }
 
     public final static int RESULT_CODE = 1;
 
     @OnClick(R.id.bt_bind)
     public void onViewClicked() {
 
-        String s = license.replaceAll("-", "");
-        //Toast.makeText(BdcpActivity2.this, s, Toast.LENGTH_SHORT).show();
-        postRequest();
-        /*if (NetworkAvailableUtils.isNetworkAvailable(getApplicationContext())) {
-            postRequest();
-        } else {
-            Toast.makeText(BdcpActivity2.this, "无网络连接", Toast.LENGTH_SHORT).show();
-        }*/
-
-
-//        Intent intent = new Intent();
-//        setResult(RESULT_CODE,intent);
-//        finish();
-//        //保存绑定车牌数据
-////        carPlate = new CarPlate(license);
-////        mCardPlateDao.insert(carPlate);
-        setResult(1);
+        if (cardId != null) {
+            addMonthCar();
+        }else {
+            addCarCard();
+            setResult(1);
+        }
     }
 
-    private void postRequest() {
-
+    private void addMonthCar() {
         String uid = null;
         String token = null;
-        if (SharedPreferenceUtil.getBean(getApplicationContext(),"userInfo") != null){
-            User user = (User)SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo");
+        if (SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo") != null) {
+            User user = (User) SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo");
             uid = user.getUserId();
             token = user.getToken();
-        }else {
+        } else {
             uid = Param.UID;
             token = Param.TOKEN;
         }
-
-
-        final String s = license.replaceAll("-", "");
-
         Map<String, String> map = new HashMap<>();
         map.put("uid", uid);
         map.put("token", token);
-        map.put("carCard", s);
+        map.put("cardId", cardId);
+        map.put("carNumber", license);
+        HttpUtils.post(Param.BANDMONTHCARDCAR, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String jsonDatas = response.body().string();
+                Log.e("绑定月卡车", jsonDatas);
+                try {
+                    try {
+                        JSONObject jsonObject = new JSONObject(jsonDatas);
+                        String content = jsonObject.optString("content");
+                        final String errMessage = jsonObject.optString("errMessage");
+                        JSONObject jb = new JSONObject(content);
+                        final String status = jb.optString("status");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (status.equals("1")) {
+                                    ToastUtil.showShort(BdcpActivity2.this, "添加成功");
+                                    EventBus.getDefault().post(new MsgEvent(ACTION_ADDMONTHCAR_SUCCESS,position));
+                                    EventBus.getDefault().post(new MsgEvent(ACTION_ADDYK_SUCCESS,position));
+                                    //Log.e("添加成功后",position+"");
+                                    finish();
+                                } else {
+                                    ToastUtil.showShort(BdcpActivity2.this, errMessage);
+                                }
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                }
+            }
+        }, map);
+    }
+
+    private void addCarCard() {
+        String uid = null;
+        String token = null;
+        if (SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo") != null) {
+            User user = (User) SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo");
+            uid = user.getUserId();
+            token = user.getToken();
+        } else {
+            uid = Param.UID;
+            token = Param.TOKEN;
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("uid", uid);
+        map.put("token", token);
+        map.put("carCard", license);
         HttpUtils.post(Param.ADDCARCARD, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BdcpActivity2.this, "绑定失败", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showShort(BdcpActivity2.this, "绑定失败");
                     }
                 });
-                Log.e("onFailure", "onFailure");
             }
 
             @Override
@@ -282,13 +300,11 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
                     try {
                         JSONObject jsonObject = new JSONObject(jsonDatas);
                         String content = jsonObject.optString("content");
+                        //add
+                        final String errMessage = jsonObject.optString("errMessage");
                         JSONObject jb = new JSONObject(content);
                         String status = jb.optString("status");
-                        Log.e("Status", status + "===" + s);
                         if (status.equals("1")) {
-                            carPlate = new CarPlate(license);
-                            mCardPlateDao.insert(carPlate);
-
                             Intent intent = new Intent();
                             setResult(RESULT_CODE, intent);
                             finish();
@@ -296,14 +312,15 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(BdcpActivity2.this, "绑定成功", Toast.LENGTH_SHORT).show();
+                                    EventBus.getDefault().post(new MsgEvent(ACTION_BUY_BIND_SUCCESS,license));
+                                    ToastUtil.showShort(BdcpActivity2.this, "绑定成功");
                                 }
                             });
                         } else {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(BdcpActivity2.this, "绑定失败", Toast.LENGTH_SHORT).show();
+                                    ToastUtil.showShort(BdcpActivity2.this, errMessage);
                                 }
                             });
                         }
@@ -313,16 +330,14 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(BdcpActivity2.this, "绑定失败", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showShort(BdcpActivity2.this, "绑定失败");
                             }
                         });
                     }
                 } catch (Exception e) {
-                    Toast.makeText(BdcpActivity2.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShort(BdcpActivity2.this, "绑定失败");
                 }
             }
-
-
         }, map);
     }
 
@@ -330,9 +345,10 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+
+        //EventBus.getDefault().post(new MsgEvent(ACTION_ADDMONTHCAR_SUCCESS,position));
     }
 
-    //add
     private KeyboardView.OnKeyboardActionListener listener = new KeyboardView.OnKeyboardActionListener() {
 
         @Override
@@ -383,14 +399,8 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
             } else {
                 editable.insert(start, Character.toString((char) primaryCode));
             }
-
-
         }
     };
-
-
-    //指定切换软键盘 isnumber false表示要切换为省份简称软键盘 true表示要切换为数字软键盘
-
 
     public void changeKeyboard(boolean isnumber) {
         if (isnumber) {
@@ -399,7 +409,6 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
             mKeyboardView.setKeyboard(province_keyboard);
         }
     }
-
 
     //软键盘展示
 
@@ -410,9 +419,7 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
         }
     }
 
-
     //软键盘隐藏
-
     public void hideKeyboard() {
         int visibility = mKeyboardView.getVisibility();
         if (visibility == View.VISIBLE) {
@@ -468,13 +475,13 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (isShow()) {
                 hideKeyboard();
+                finish();
             } else {
                 finish();
             }
         }
         return false;
     }
-
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
@@ -490,8 +497,7 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
                     currentIndex = i;
                 }
             }
-//            Toast.makeText(mContext, "currentIndex" + currentIndex, Toast.LENGTH_SHORT).show();
-//            Log.i("Tag1111", "onFocusChange currentIndex= " + currentIndex);
+
             if (currentIndex == 0) {
                 changeKeyboard(false);
             } else {
@@ -502,13 +508,8 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
             if (!isShow()) {
                 showKeyboard();
             }
-
-
         }
-
-
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -525,7 +526,6 @@ public class BdcpActivity2 extends BaseActivity implements View.OnFocusChangeLis
         s.clear();
         if (!isShow()) {
             showKeyboard();
-
         }
         return false;
 

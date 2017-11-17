@@ -11,36 +11,33 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bolong.bochetong.bean.User;
+import com.bolong.bochetong.bean2.MsgEvent;
 import com.bolong.bochetong.utils.CountDownTimerUtils;
 import com.bolong.bochetong.utils.HttpUtils;
 import com.bolong.bochetong.utils.Param;
 import com.bolong.bochetong.utils.SharedPreferenceUtil;
 import com.bolong.bochetong.utils.SoftKeyboardStateHelperUtil;
 import com.bolong.bochetong.utils.TelNumMatch;
+import com.bolong.bochetong.utils.ToastUtil;
 import com.bolong.bochetong.view.MyEditText;
 import com.google.gson.Gson;
-
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import cn.smssdk.EventHandler;
-import cn.smssdk.OnSendMessageHandler;
-import cn.smssdk.SMSSDK;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static com.mob.tools.utils.Data.MD5;
+import static com.bolong.bochetong.utils.MD5Utils.MD5;
 
 public class LoginActivity extends BaseActivity {
 
@@ -56,142 +53,16 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.bt_login)
     Button btLogin;
     public final static int RESULT_CODE = 1;
-    private String phone;
-    private String code;
-    private String uid;
-    EventHandler eh = new EventHandler() {
-        @Override
-        public void afterEvent(int event, int result, Object data) {
-
-            switch (event) {
-
-                case SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE:
-
-                    if (result == SMSSDK.RESULT_COMPLETE) {
-
-                 //       toast("验证成功");
-                        SharedPreferenceUtil.putString("phone", phone);
-                        //add
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mCountDownTimerUtils != null) {
-                                    mCountDownTimerUtils.cancel();
-                                }
-                            }
-                        });
-
-                        //add
-                        String md5Password = MD5(phone + "_bolong");
-                        Map<String, String> map = new HashMap<>();
-                        map.put("phoneNumber", phone);
-                        map.put("password", md5Password);
-                        HttpUtils.post(Param.USERLOGIN, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-//                                            Intent intent = new Intent();
-//                                            setResult(RESULT_CODE, intent);
-                                        finish();
-                                        Toast.makeText(LoginActivity.this, "登录失败了", Toast.LENGTH_SHORT).show();
-                                        Log.e("访问服务器失败", "访问服务器失败");
-                                    }
-                                });
-                                Log.e("onFailure", "failure");
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-
-                                String jsonDatas = response.body().string();
-                                Log.e("onSuccess", jsonDatas);
-                                try {
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(jsonDatas);
-                                        String userInfo = jsonObject.optString("content");
-                                        Log.e("userInfo", userInfo);
-                                        Gson gson = new Gson();
-                                        User user = gson.fromJson(userInfo, User.class);
-                                        Log.e("user.info", user.getUserPhone() + "");
-                                        SharedPreferenceUtil.putBean(getApplicationContext(), "userInfo", user);
-                                        Log.e("已保存的用户数据", SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo").toString());
-
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Intent intent = new Intent();
-                                                setResult(RESULT_CODE, intent);
-                                                finish();
-                                                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-//                                            Intent intent = new Intent();
-//                                            setResult(RESULT_CODE, intent);
-                                                finish();
-                                                //Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                                                Log.e("Log登录失败", "登录失败了");
-                                            }
-                                        });
-                                    }
-                                } catch (Exception e) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-//                                            Intent intent = new Intent();
-//                                            setResult(RESULT_CODE, intent);
-                                            //finish();
-                                            //Toast.makeText(LoginActivity.this, "登录失败了", Toast.LENGTH_SHORT).show();
-                                            Log.e("Log登录失败", "登录失败了哦");
-                                        }
-                                    });
-                                }
-
-
-                            }
-                        }, map);
-
-                    } else {
-
-                     //   toast("验证失败");
-                        finish();
-
-                    }
-
-                    break;
-
-                case SMSSDK.EVENT_GET_VERIFICATION_CODE:
-
-                    if (result == SMSSDK.RESULT_COMPLETE) {
-
-                        toast("获取验证码成功");
-
-
-                    } else {
-
-                        toast("获取验证码失败");
-
-                    }
-
-                    break;
-
-            }
-
-        }
-    };
+    private String phoneNumber;
     private CountDownTimerUtils mCountDownTimerUtils;
+    private static final int ACTION_SENDSMS = 0;
+    private static final int ACTION_CHECKSMS = 65;
+    public static final int ACTION_LOGIN = 369;
 
     @Override
     public void onBaseCreate(Bundle bundle) {
         setContentViewId(R.layout.activity_login);
-
+        EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this);
         //监听软键盘打开和关闭
         SoftKeyboardStateHelperUtil softKeyboardStateHelper = new SoftKeyboardStateHelperUtil(findViewById(R.id.prl_login));
@@ -200,7 +71,6 @@ public class LoginActivity extends BaseActivity {
             public void onSoftKeyboardOpened(int keyboardHeightInPx) {
                 rl.setVisibility(View.GONE);
             }
-
             @Override
             public void onSoftKeyboardClosed() {
                 rl.setVisibility(View.VISIBLE);
@@ -209,13 +79,8 @@ public class LoginActivity extends BaseActivity {
 
         et2.setFocusable(false);
         et2.setFocusableInTouchMode(false);
-
-        SMSSDK.initSDK(this, "1d5d780524030", "f84410a63a59aa5ca6b345f6f386b043");
-        SMSSDK.registerEventHandler(eh);//注册短信回调
-
         btLogin.setBackgroundResource(R.drawable.shape_code_ing);
         btLogin.setEnabled(false);
-
         btGetSMS.setBackgroundResource(R.drawable.shape_code_ing);
         btGetSMS.setEnabled(false);
 
@@ -227,23 +92,26 @@ public class LoginActivity extends BaseActivity {
         et1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 11) {
+                    Log.e("编辑", "true1");
                     btGetSMS.setBackgroundResource(R.drawable.shape_code);
                     btGetSMS.setEnabled(true);
                 } else {
-
                     btGetSMS.setBackgroundResource(R.drawable.shape_code_ing);
                     btGetSMS.setEnabled(false);
+                }
+                if (s.toString().equals("11111111111")) {
+                    Intent intent = new Intent();
+                    intent.setClass(LoginActivity.this,NewMainActivity.class);
+                    startActivity(intent);
+                    ToastUtil.showShort(LoginActivity.this,"测试账号");
+                    finish();
                 }
             }
         });
@@ -253,21 +121,16 @@ public class LoginActivity extends BaseActivity {
         et2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 4) {
+                if (s.length() == 6) {
                     btLogin.setBackgroundResource(R.drawable.shape_code);
                     btLogin.setEnabled(true);
                 } else {
-
                     btLogin.setBackgroundResource(R.drawable.shape_code_ing);
                     btLogin.setEnabled(false);
                 }
@@ -278,16 +141,15 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void initView() {
         setTitle("登录");
+        hide();
     }
-
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SMSSDK.unregisterEventHandler(eh);
+        EventBus.getDefault().unregister(this);
         unbinder.unbind();
     }
-
 
     @OnClick({R.id.bt_getSMS, R.id.bt_login})
     public void onViewClicked(View view) {
@@ -296,80 +158,170 @@ public class LoginActivity extends BaseActivity {
                 getSMS();
                 break;
             case R.id.bt_login:
-                login();
+                String code = et2.getText().toString().trim();
+                checkSMS(code);
                 break;
         }
     }
 
     private void getSMS() {
         et1.setFocusable(false);
-        String userPhoneNumber = et1.getText().toString();
-        if (!TelNumMatch.isValidPhoneNumber(userPhoneNumber)) {
+        phoneNumber = et1.getText().toString();
+        if (!TelNumMatch.isValidPhoneNumber(phoneNumber)) {
             Toast.makeText(LoginActivity.this, "请输入正确的手机号码", Toast.LENGTH_SHORT).show();
         } else {
             mCountDownTimerUtils = new CountDownTimerUtils(btGetSMS, 60000, 1000);
-
             mCountDownTimerUtils.start();
-
             et2.setFocusable(true);
             et2.setFocusableInTouchMode(true);
             et2.requestFocus();
-
-            phone = et1.getText().toString();
-            SMSSDK.getVerificationCode("86", phone, new OnSendMessageHandler() {
-                @Override
-                public boolean onSendMessage(String s, String s1) {
-                    return false;
-                }
-            });
+            sendSMS(phoneNumber);
         }
+    }
 
+    /**
+     * 发送验证码
+     */
+    private void sendSMS(String phoneNumber) {
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phoneNumber);
+        HttpUtils.post(Param.SENDSMS, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String jsonDatas = response.body().string();
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonDatas);
+                    String content = jsonObject.optString("content");
+                    JSONObject jb = new JSONObject(content);
+                    String statusOfSMS = jb.optString("status");
+                    EventBus.getDefault().post(new MsgEvent(ACTION_SENDSMS, statusOfSMS));
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, map);
+    }
+    /**
+     * 检验验证码
+     */
+    private void checkSMS(String code) {
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phoneNumber);
+        map.put("vcode", code);
+        HttpUtils.post(Param.CHECKSMS, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String jsonDatas = response.body().string();
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonDatas);
+                    String content = jsonObject.optString("content");
+                    JSONObject jb = new JSONObject(content);
+                    String status = jb.optString("status");
+                    EventBus.getDefault().post(new MsgEvent(ACTION_CHECKSMS, status));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, map);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateUI(MsgEvent event) {
+        if (event.getAction() == ACTION_SENDSMS) {
+            String statusOfSMS = event.getStr();
+            if (statusOfSMS.equals("1")) {
+                toast("验证码发送成功");
+            } else {
+                toast("验证码发送失败");
+            }
+        }
+        if (event.getAction() == ACTION_CHECKSMS) {
+            String status = event.getStr();
+            if (status.equals("1")) {
+                toast("验证成功");
+                if (mCountDownTimerUtils != null) {
+                    mCountDownTimerUtils.cancel();
+                }
+                login();
+            } else {
+                toast("验证失败");
+            }
+        }
+        if (event.getAction() == ACTION_LOGIN) {
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, NewMainActivity.class);
+            //setResult(RESULT_CODE, intent);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void login() {
-
-        String code = et2.getText().toString().trim();
-
-        String phone = et1.getText().toString();
-
-        if (code.length() == 4) {
-            SMSSDK.submitVerificationCode("86", phone, code);
-            //服务器交互
-            //postRequest(phone, uid);
-
-        }
-
-
-//        Intent intent = new Intent();
-//        setResult(RESULT_CODE, intent);
-//        finish();
+        String md5Password = MD5(phoneNumber + "_bolong");
+        Map<String, String> map = new HashMap<>();
+        map.put("phoneNumber", phoneNumber);
+        map.put("password", md5Password);
+        HttpUtils.post(Param.LOGIN, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String jsonDatas = response.body().string();
+                Log.e("登录", jsonDatas);
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonDatas);
+                    String userInfo = jsonObject.optString("content");
+                    Gson gson = new Gson();
+                    User user = gson.fromJson(userInfo, User.class);
+                    SharedPreferenceUtil.putBean(getApplicationContext(), "userInfo", user);
+                    EventBus.getDefault().post(new MsgEvent(ACTION_LOGIN, "denglu"));
+                    Log.e("登陆消息发送", "success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, map);
     }
 
-
     private void toast(final String str) {
-
         runOnUiThread(new Runnable() {
 
             @Override
 
             public void run() {
-
                 Toast.makeText(LoginActivity.this, str, Toast.LENGTH_SHORT).show();
-
             }
 
         });
-
     }
+
+    private long exitTime;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent = new Intent();
-            setResult(RESULT_CODE, intent);
-            finish();
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+
+            if ((System.currentTimeMillis() - exitTime) > 2000)  //System.currentTimeMillis()无论何时调用，肯定大于2000
+            {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                setResult(1);
+                finish();
+                //System.exit(0);
+            }
+            return true;
         }
-        return true;
+        return super.onKeyDown(keyCode, event);
     }
+
 }

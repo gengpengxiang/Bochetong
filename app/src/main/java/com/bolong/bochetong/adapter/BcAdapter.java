@@ -5,18 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.bolong.bochetong.activity.R;
-import com.bolong.bochetong.bean.Bill;
 import com.bolong.bochetong.bean.Park;
-import com.bolong.bochetong.utils.DateUtils;
-
-import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by admin on 2017/5/3.
- */
 
 public class BcAdapter extends RecyclerView.Adapter<BcAdapter.ViewHolder> {
 
@@ -30,7 +21,6 @@ public class BcAdapter extends RecyclerView.Adapter<BcAdapter.ViewHolder> {
     public interface OnItemClickLitener
     {
         void onItemClick(View view, int position);
-
     }
 
     private OnItemClickLitener mOnItemClickLitener;

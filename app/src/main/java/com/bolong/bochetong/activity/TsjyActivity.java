@@ -21,6 +21,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,11 +34,13 @@ import okhttp3.Response;
 
 public class TsjyActivity extends BaseActivity {
 
+    private InputMethodManager imm;
     private Unbinder unbinder;
     @BindView(R.id.et_content)
     EditText etContent;
     @BindView(R.id.bt_submit)
     Button btSubmit;
+    private CustomPopDialog dialog;
 
     @Override
     public void onBaseCreate(Bundle bundle) {
@@ -44,7 +48,7 @@ public class TsjyActivity extends BaseActivity {
         setContentViewId(R.layout.activity_tsjy);
 
         unbinder = ButterKnife.bind(this);
-        showKeyBoard();
+       // showKeyBoard();
         changeBtn();
 
         btSubmit.setBackgroundResource(R.drawable.shape_code_ing);
@@ -79,13 +83,6 @@ public class TsjyActivity extends BaseActivity {
         });
     }
 
-    private void showKeyBoard() {
-        InputMethodManager imm = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(etContent, InputMethodManager.RESULT_SHOWN);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,
-                InputMethodManager.HIDE_IMPLICIT_ONLY);
-    }
 
     @Override
     public void initView() {
@@ -96,6 +93,7 @@ public class TsjyActivity extends BaseActivity {
     @OnClick(R.id.bt_submit)
     public void onViewClicked() {
 
+        //closeKeybord(etContent,TsjyActivity.this);
         String uid = null;
         String token = null;
         if (SharedPreferenceUtil.getBean(getApplicationContext(), "userInfo") != null) {
@@ -138,7 +136,15 @@ public class TsjyActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 showDialog();
-                                //Toast.makeText(TsjyActivity.this, status, Toast.LENGTH_SHORT).show();
+                                Timer timer = new Timer();
+                                TimerTask task = new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        finish();
+                                    }
+                                };
+                                timer.schedule(task, 1000 * 1);
+
                             }
                         });
                     } catch (JSONException e) {
@@ -167,11 +173,15 @@ public class TsjyActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+        if(dialog!=null){
+            dialog.dismiss();
+        }
+
     }
 
     public void showDialog() {
         CustomPopDialog.Builder dialogBuild = new CustomPopDialog.Builder(this);
-        CustomPopDialog dialog = dialogBuild.create(R.layout.layout_dialog_tsjy);
+        dialog = dialogBuild.create(R.layout.layout_dialog_tsjy);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
@@ -187,4 +197,5 @@ public class TsjyActivity extends BaseActivity {
             }
         });
     }
+
 }

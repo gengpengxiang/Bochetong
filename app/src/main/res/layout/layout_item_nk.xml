@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/deepwhite">
+
+    <android.support.percent.PercentRelativeLayout
+        android:paddingTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_layout_white">
+        <TextView
+            android:id="@+id/tv_parkName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="北京市门头沟丽景长安停车场"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+        <!-- 左边 -->
+        <RelativeLayout
+            android:id="@+id/layout_left"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@id/tv_parkName"
+            android:layout_marginTop="50dp"
+            app:layout_heightPercent="35%"
+            app:layout_widthPercent="50%">
+
+            <TextView
+                android:id="@+id/tv_sjh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="手机号"
+                android:textColor="@color/blue"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:id="@+id/et_phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_sjh"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="110"
+                android:textCursorDrawable="@drawable/shape_edittext"
+                android:textSize="16sp" />
+
+            <!--<TextView
+                android:id="@+id/tv_phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_sjh"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@android:drawable/editbox_background_normal"
+                android:gravity="center"
+                android:inputType="number"
+                android:text="15612770087"
+                android:textSize="16sp"
+                android:visibility="gone" />-->
+            <TextView
+                android:id="@+id/bt_change"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_below="@id/et_phoneNumber"
+                android:text="更换"
+                android:padding="5dp"
+                android:onClick="doClick"
+                android:background="@drawable/shape_item_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_right"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_parkName"
+            android:layout_marginTop="50dp"
+            app:layout_heightPercent="35%"
+            app:layout_widthPercent="50%">
+
+            <TextView
+                android:id="@+id/tv_cph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="车牌号"
+                android:textColor="@color/blue"
+                android:textStyle="bold" />
+
+            <ListView
+                android:layout_marginTop="10dp"
+                android:divider="@null"
+                android:dividerHeight="5dp"
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/tv_cph" />
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:id="@+id/bt_add"
+                android:layout_below="@id/listView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/icon_input_add"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_marginTop="30dp"
+            android:id="@+id/layout_carPosition"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_left"
+            android:orientation="vertical"
+            app:layout_widthPercent="50%">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="车位号"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_carPort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="01022" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="30dp"
+            android:id="@+id/layout_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/layout_right"
+            android:orientation="vertical"
+            app:layout_widthPercent="50%">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="起止日期"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_startTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="2017-02-02" />
+
+            <TextView
+                android:id="@+id/tv_stopTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="2017-12-02" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_xf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_date"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/bg_kscz_yue" />
+
+            <TextView
+                android:id="@+id/bt_xufei"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="续费"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </android.support.percent.PercentRelativeLayout>
+
+
+</android.support.percent.PercentRelativeLayout>
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_fpkp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bolong.bochetong.activity.FpkpActivity">
+
+
+    <TextView
+        android:id="@+id/tv_success"
+        android:layout_centerInParent="true"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@mipmap/icon_confirm_success"
+        android:text="申请成功,请到开票历史处下载"
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"/>
+
+</RelativeLayout>

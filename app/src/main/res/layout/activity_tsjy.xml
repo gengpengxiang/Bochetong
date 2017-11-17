@@ -4,7 +4,7 @@
     android:paddingTop="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f1f1f1">
+    android:background="@color/deepwhite">
 
     <!--<ImageView-->
         <!--android:id="@+id/icon_bc"-->

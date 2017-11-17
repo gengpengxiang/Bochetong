@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_quit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_dialog"
+    android:paddingBottom="20dp"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:paddingTop="20dp">
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="温馨提示"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv1"
+        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="10dp"
+        android:text="@string/monthcard_warn"
+        android:textSize="16sp" />
+
+
+   <!-- <com.bolong.bochetong.view.TypesetTextView
+        android:id="@+id/tv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv1"
+        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="10dp"
+        android:text="@string/monthcard_warn"
+        android:textSize="16sp" />-->
+
+
+    <com.bolong.bochetong.view.TypesetTextView
+        android:id="@+id/tv_monthcard_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv2"
+        android:layout_marginTop="10dp"
+        android:lineSpacingExtra="10dp"
+        android:text="停车场"
+        android:textColor="@color/blue"
+        android:textSize="16sp" />
+
+</RelativeLayout>
+

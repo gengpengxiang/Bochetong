@@ -1,6 +1,7 @@
 package com.bolong.bochetong.utils;
 
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +30,13 @@ public class DateUtils {
     }*/
     public static String getDateToString(long time) {
         Date d = new Date(time);
-        sf = new SimpleDateFormat("yyyy.MM.dd");
+        sf = new SimpleDateFormat("yyyy.MM.dd h:mm");
+        return sf.format(d);
+    }
+
+    public static String getDateToString2(long time) {
+        Date d = new Date(time);
+        sf = new SimpleDateFormat("yyyy.MM.dd hh:mm");
         return sf.format(d);
     }
 
@@ -46,5 +53,19 @@ public class DateUtils {
         }
         return date.getTime();
     }
+
+    public static long getStringToDate2(String time) {
+        sf = new SimpleDateFormat("yyyy.MM.dd hh:mm");
+        Date date = new Date();
+        try {
+            date = sf.parse(time);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return date.getTime();
+    }
+
+
 
 }

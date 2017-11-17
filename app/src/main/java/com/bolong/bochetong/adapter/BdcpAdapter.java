@@ -8,39 +8,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bolong.bochetong.activity.R;
-import com.bolong.bochetong.bean.CarPlate;
+import com.bolong.bochetong.bean2.CarCard;
 
-import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by admin on 2017/4/28.
- */
 
 public class BdcpAdapter extends RecyclerView.Adapter<BdcpAdapter.ViewHolder> {
 
     private ButtonInterface buttonInterface;
     private Context context;
-    private List<CarPlate> carPlates;
+    private List<CarCard.ContentBean> carPlates;
 
-    public BdcpAdapter(Context context,List<CarPlate> carPlates) {
+    public BdcpAdapter(Context context,List<CarCard.ContentBean> carPlates) {
         this.context = context;
         this.carPlates = carPlates;
     }
 
-
-    //点击监听
-//    public interface OnItemClickLitener {
-//        void onItemClick(View view, int position);
-//
-//        void onItemLongClick(View view, int position);
-//    }
-//
-//    private OnItemClickLitener mOnItemClickLitener;
-//
-//    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
-//        this.mOnItemClickLitener = mOnItemClickLitener;
-//    }
 
     //创建新View，被LayoutManager所调用
     @Override
@@ -53,27 +35,10 @@ public class BdcpAdapter extends RecyclerView.Adapter<BdcpAdapter.ViewHolder> {
     //将数据与界面进行绑定的操作
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.tv.setText(carPlates.get(position).getCarPlate());
+        StringBuffer stringBuffer = new StringBuffer(carPlates.get(position).getCarCard());
+        //holder.tv.setText(carPlates.get(position).getCarCard());
+        holder.tv.setText(stringBuffer.insert(2,"-"));
 
-        // 如果设置了回调，则设置点击事件
-//        if (mOnItemClickLitener != null) {
-//            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int pos = holder.getLayoutPosition();
-//                    mOnItemClickLitener.onItemClick(holder.itemView, pos);
-//                }
-//            });
-//
-//            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    int pos = holder.getLayoutPosition();
-//                    mOnItemClickLitener.onItemLongClick(holder.itemView, pos);
-//                    return false;
-//                }
-//            });
-//        }
 
         holder.tv.setOnClickListener(new View.OnClickListener() {
             @Override
